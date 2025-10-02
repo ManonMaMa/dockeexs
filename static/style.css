@@ -5,3 +5,20 @@ p{
 body{
     background-color: rgb(14, 14, 80);
 }
+
+.image{
+    width : 20vw;
+    border-radius : 5vw;
+}
+
+.lien{
+    position: fixed;
+    left: 20vw;
+    top: 20vw;
+}
+
+.lien2{
+    position: fixed;
+    left: 60vw;
+    top: 20vw;
+}
