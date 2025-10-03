@@ -3,6 +3,11 @@ from flask import Flask, request
 from flask import render_template
 from werkzeug.utils import secure_filename
 
+# Lors du développement d'une app Flask, mettre :
+#       les fichiers HTML dans un dossier templates/
+#       les fichiers CSS, JS, images dans un dossier static/
+
+# Flask utilise la valeur de __name__ pour savoir où est le fichier principal
 app = Flask(__name__)
 
 IMG_FOLDER = os.path.join("static", "uploaded_images")
@@ -11,7 +16,7 @@ app.config["UPLOAD_FOLDER"] = IMG_FOLDER
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 # Lors d’une requête sur la route ‘/’ flask doit renvoyer la page index.html
-@app.route("/")
+@app.route("/")                             # défini des routes (@app.route(...))
 def index():
     return render_template('index.html')
 
@@ -41,9 +46,9 @@ def upload_file():
             return render_template('new_personnage.html')
     return render_template('new_personnage.html')
 
-# mode debug et hot reload actif
+# Lancement du serveur : mode debug et hot reload actif
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)      # démarre le serveur
 
 # if __name__ == '__main__':
 #     app.run(debug = True)
