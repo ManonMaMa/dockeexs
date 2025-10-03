@@ -10,6 +10,7 @@ app.config["UPLOAD_FOLDER"] = IMG_FOLDER
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
+# Lors d’une requête sur la route ‘/’ flask doit renvoyer la page index.html.
 @app.route("/")
 def index():
     return render_template('index.html')
