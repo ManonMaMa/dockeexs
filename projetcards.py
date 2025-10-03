@@ -10,15 +10,16 @@ from werkzeug.utils import secure_filename
 # création de l'application Flask ( on indique que ce fichier est le fichier principal)
 app = Flask(__name__)       # __name__ : variable spéciale de python contenant le nom de ce fichier
 
-IMG_FOLDER = os.path.join("static", "uploaded_images")
-app.config["UPLOAD_FOLDER"] = IMG_FOLDER
+# gestion des fichiers uploadés (images envoyées par un formulaire)
+IMG_FOLDER = os.path.join("static", "uploaded_images")      # écriture d'un chemin lisible par tous (windows, linux, mac)
+app.config["UPLOAD_FOLDER"] = IMG_FOLDER                    # indique à Flask le chemin pour faire les sauvegardes
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 # Définition d'une route :  http://127.0.0.1:5000/
 @app.route("/")                             
 def index():
-    return render_template('index.html')
+    return render_template('index.html')        # fonction de Flask qui va chercher index.html dans le dossier templates/
 
 # Définition d'une route :  http://127.0.0.1:5000/galerie
 @app.route("/galerie")

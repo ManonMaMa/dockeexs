@@ -10,10 +10,11 @@ Ce projet prendra la forme de deux containers interagissant ensemble pour former
     >python -m pip install Flask        # installation de Flask
 
 2) création du fichier principal projetcards.py
-    http://127.0.0.1:5000/              # app.route("/")
+    http://127.0.0.1:5000/                  # app.route("/")
+    http://127.0.0.1:5000/galerie
+    http://127.0.0.1:5000/new_personnage
 
-
-
+    
 
 docker build -t projectcard .
 
