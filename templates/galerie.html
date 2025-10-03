@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Galerie</title>
     <!-- appelation des fichiers css -->
-    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="../static/css/style.css">
 </head>
 <body>
-    {% for image in list_test %}
-        <img src="{{url_for('static', filename=image)}}" alt="test failed">
+    {% for image in liste_images %}
+        <img src="{{url_for('static', filename=image)}}" alt="Image {{image}}">
     {% endfor %}
 </body>
 </html>

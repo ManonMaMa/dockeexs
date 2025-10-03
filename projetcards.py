@@ -16,9 +16,9 @@ def index():
 
 @app.route("/galerie")
 def galerie():
-    test_list = os.listdir("static")
-    test_list = ["/" + image for image in test_list]
-    return render_template('galerie.html', list_test=test_list)
+    image_list = os.listdir("static/uploaded_images")
+    image_list = ["uploaded_images/" + image for image in image_list]
+    return render_template('galerie.html', liste_images=image_list)
 
 def allowed_file(filename):
     return filename.split('.')[1].lower() in ALLOWED_EXTENSIONS
