@@ -1,19 +1,18 @@
-from flask import Flask
-from flask import render_template
 import os
+from flask import Flask, request
+from flask import render_template
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
-IMG_FOLDER = os.path.join("static")
+IMG_FOLDER = os.path.join("static", "uploaded_images")
 app.config["UPLOAD_FOLDER"] = IMG_FOLDER
+
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 @app.route("/")
 def index():
     return render_template('index.html')
-
-@app.route("/new_personnage")
-def new_personnage():
-    return render_template('new_personnage.html')
 
 @app.route("/galerie")
 def galerie():
@@ -21,6 +20,29 @@ def galerie():
     test_list = ["/" + image for image in test_list]
     return render_template('galerie.html', list_test=test_list)
 
+def allowed_file(filename):
+    return filename.split('.')[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/new_personnage', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            return render_template('new_personnage.html')
+        file = request.files['file']
+        # If the user does not select a file, the browser submits an
+        # empty file without a filename.
+        if file.filename == '':
+            return render_template('new_personnage.html')
+        elif allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return render_template('new_personnage.html')
+    return render_template('new_personnage.html')
+
 if __name__ == '__main__':
     app.run(debug = True)
+
+# if __name__ == '__main__':
+#     app.run(host='0.0.0.0', port=5000, debug=True)
 

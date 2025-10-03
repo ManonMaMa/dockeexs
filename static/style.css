@@ -22,3 +22,11 @@ body{
     left: 60vw;
     top: 20vw;
 }
+
+input{
+    color : white
+}
+
+.bouton{
+    color : green
+}
