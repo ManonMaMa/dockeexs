@@ -10,7 +10,7 @@ app.config["UPLOAD_FOLDER"] = IMG_FOLDER
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
-# Lors d’une requête sur la route ‘/’ flask doit renvoyer la page index.html.
+# Lors d’une requête sur la route ‘/’ flask doit renvoyer la page index.html
 @app.route("/")
 def index():
     return render_template('index.html')
@@ -43,8 +43,9 @@ def upload_file():
 
 # mode debug et hot reload actif
 if __name__ == '__main__':
-    app.run(debug = True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
 
 # if __name__ == '__main__':
-#     app.run(host='0.0.0.0', port=5000, debug=True)
+#     app.run(debug = True)
+
 
