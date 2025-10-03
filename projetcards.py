@@ -7,7 +7,7 @@ from werkzeug.utils import secure_filename
 #       les fichiers HTML dans un dossier templates/
 #       les fichiers CSS, JS, images dans un dossier static/
 
-# pour indiquer que ce fichier est le fichier principal
+# création de l'application Flask ( on indique que ce fichier est le fichier principal)
 app = Flask(__name__)       # __name__ : variable spéciale de python contenant le nom de ce fichier
 
 IMG_FOLDER = os.path.join("static", "uploaded_images")
@@ -15,11 +15,12 @@ app.config["UPLOAD_FOLDER"] = IMG_FOLDER
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
-
+# Définition d'une route :  http://127.0.0.1:5000/
 @app.route("/")                             
 def index():
     return render_template('index.html')
 
+# Définition d'une route :  http://127.0.0.1:5000/galerie
 @app.route("/galerie")
 def galerie():
     image_list = os.listdir("static/uploaded_images")
@@ -29,6 +30,7 @@ def galerie():
 def allowed_file(filename):
     return filename.split('.')[1].lower() in ALLOWED_EXTENSIONS
 
+# Définition d'une route :  http://127.0.0.1:5000/new_personnage
 @app.route('/new_personnage', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
