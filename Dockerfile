@@ -1,12 +1,12 @@
-FROM alpine
-LABEL maintainer="DockerGeek"
+# syntax=docker/dockerfile:1
 
-# CMD ["echo", "Conversation depuis l'intérieur de la baleine"]
+FROM python:3.8-slim-buster
 
-# RUN apk update && apk upgrade && apk add figlet
+WORKDIR /python-docker
 
-# ENTRYPOINT [ "figlet" ]
+COPY requirements.txt requirements.txt
+RUN pip3 install -r requirements.txt
 
-COPY ./index.html /usr/share/nginx/html/
+COPY . .
 
-EXPOSE 80
+CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]

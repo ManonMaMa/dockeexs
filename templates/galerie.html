@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="../static/css/style.css">
 </head>
 <body>
+    <a class="retouraccueil" href="/"><img class="imageretour" src='../static/galerie.jpg' alt='bouton galerie pokemon'></a>
+    
     {% for image in liste_images %}
         <img src="{{url_for('static', filename=image)}}" alt="Image {{image}}">
     {% endfor %}

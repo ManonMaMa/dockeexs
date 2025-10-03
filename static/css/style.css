@@ -11,6 +11,11 @@ body{
     border-radius : 5vw;
 }
 
+.imageretour{
+    width : 2vw;
+    border-radius : 1vw;
+}
+
 .lien{
     position: fixed;
     left: 20vw;
@@ -21,6 +26,12 @@ body{
     position: fixed;
     left: 60vw;
     top: 20vw;
+}
+
+.retouraccueil{
+    position: fixed;
+    left: 2vw;
+    top: 2vw;
 }
 
 input{
