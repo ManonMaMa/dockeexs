@@ -7,16 +7,16 @@ from werkzeug.utils import secure_filename
 #       les fichiers HTML dans un dossier templates/
 #       les fichiers CSS, JS, images dans un dossier static/
 
-# Flask utilise la valeur de __name__ pour savoir où est le fichier principal
-app = Flask(__name__)
+# pour indiquer que ce fichier est le fichier principal
+app = Flask(__name__)       # __name__ : variable spéciale de python contenant le nom de ce fichier
 
 IMG_FOLDER = os.path.join("static", "uploaded_images")
 app.config["UPLOAD_FOLDER"] = IMG_FOLDER
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
-# Lors d’une requête sur la route ‘/’ flask doit renvoyer la page index.html
-@app.route("/")                             # défini des routes (@app.route(...))
+
+@app.route("/")                             
 def index():
     return render_template('index.html')
 
