@@ -40,6 +40,7 @@ def upload_file():
             return render_template('new_personnage.html')
     return render_template('new_personnage.html')
 
+# mode debug et hot reload actif
 if __name__ == '__main__':
     app.run(debug = True)
 
