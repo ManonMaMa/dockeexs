@@ -14,9 +14,10 @@ app = Flask(__name__)       # __name__ : variable spéciale de python contenant 
 IMG_FOLDER = os.path.join("static", "uploaded_images")      # écriture d'un chemin lisible par tous (windows, linux, mac)
 app.config["UPLOAD_FOLDER"] = IMG_FOLDER                    # indique à Flask le chemin pour faire les sauvegardes
 
+# protection : liste d’extensions de fichiers autorisées
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
-# Définition d'une route :  http://127.0.0.1:5000/
+# Définition de la route principale :  http://127.0.0.1:5000/
 @app.route("/")                             
 def index():
     return render_template('index.html')        # fonction de Flask qui va chercher index.html dans le dossier templates/

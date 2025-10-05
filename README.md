@@ -4,7 +4,7 @@ Ce projet prendra la forme de deux containers interagissant ensemble pour former
 
 ------------------- Création de l'application Flask ------------------------
 1) installation de l'environnement :
-    se placer dans le dossier du projet
+    sur le terminal, se placer dans le dossier du projet
     >py -3 -m venv .venv                # environnement virtuel
     >.venv\Scripts\activate             # activation de l'environnement
     >python -m pip install Flask        # installation de Flask
@@ -13,6 +13,10 @@ Ce projet prendra la forme de deux containers interagissant ensemble pour former
     http://127.0.0.1:5000/                  # app.route("/")
     http://127.0.0.1:5000/galerie
     http://127.0.0.1:5000/new_personnage
+
+    utilisation de la fonction url_for()
+    utilisation de la fonction render_templates()
+    
 
     
 
