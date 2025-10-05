@@ -4,13 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accueil</title>
-    <!-- appellation des fichiers css -->
-    <link rel="stylesheet" href="../static/css/style.css">
+    <!-- appel des fichiers css : Utilisation de la fonction url_for() pour créer des références URL absolues vers les fichiers statiques  -->
+    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
 </head>
 <body>
 
-<a class="lien" href="galerie"><img class="image" src='../static/galerie.jpg' alt='bouton galerie pokemon'></a>
-<a class="lien2" href="new_personnage"><img class="image" src='../static/ajoutcards.jpg' alt='bouton nouveau personnage'></a>
+    <!-- 
+    Cette page proposera d’accéder à deux pages différentes :
+            galerie.html : Une page galerie
+            new_personnage.html : Une page pour ajouter un nouveau personnage dans la galerie
+    
+    Utilisation de la fonction url_for() pour créer des références URL absolues vers les fichiers statiques
+    -->
+
+    <!--lien qui redirige vers la route Flask nommée /galerie -->
+    <a class="lien" href="galerie"><img class="image" src="{{url_for('static', filename='img/galerie.jpg')}}" alt='bouton galerie pokemon'></a> 
+    <!--lien qui redirige vers la route Flask nommée /new_personnage -->
+    <a class="lien2" href="new_personnage"><img class="image" src="{{url_for('static', filename='img/ajoutcards.jpg')}}" alt='bouton nouveau personnage'></a>
 
 </body>
 </html>
