@@ -1,0 +1,30 @@
+version: '3'
+services:
+  web:
+    build: .
+    ports:
+      - "5050:5000"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql://pokemon:password@db/myapp
+    # ce qui permet de rechager la page avec les modifs de la base de données
+    volumes:
+      - .:/app
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_USER=pokemon
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=myapp
+    # sauvegarder les données
+    volumes: 
+      - postgres_data:/var/lib/postgresql/data
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+volumes:
+  postgres_data:
