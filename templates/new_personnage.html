@@ -9,7 +9,17 @@
 </head>
 <body>
 
-<a class="retouraccueil" href="/"><img class="imageretour" src='../static/galerie.jpg' alt='bouton galerie pokemon'></a>
+<!-- 
+    Cette page propose d’uploader l’image d’un nouveau personnage sur le serveur. 
+    L’image devra être sauvegardée dans le dossier static/uploaded_images/
+-->
+    
+<!-- Utilisation de la fonction url_for() pour créer des références URL absolues vers les fichiers statiques -->
+<a class="retouraccueil" href="/">
+    <img class="imageretour" 
+         src="{{url_for('static', filename='img/galerie.jpg')}}" 
+         alt='bouton galerie pokemon'>
+</a>
 
 <form action="new_personnage" method="post" enctype="multipart/form-data">
     <input type="file" name="file">
