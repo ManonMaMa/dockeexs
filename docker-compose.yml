@@ -1,6 +1,7 @@
 version: '3'
 services:
   web:
+    # meme utilité que la commande build
     build: .
     ports:
       - "5050:5000"
@@ -20,11 +21,13 @@ services:
     # sauvegarder les données
     volumes: 
       - postgres_data:/var/lib/postgresql/data
+# ________permet d'avoir un oeil sur la bd________
   adminer:
     image: adminer
     restart: always
     ports:
       - 8080:8080
 
+# recupere les données de la bd
 volumes:
   postgres_data:
