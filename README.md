@@ -1,6 +1,6 @@
 Mini projet Docker : générer des biographies de personnages inspirées d’images de référence grâce à des LLMs.
 
-Ce projet prendra la forme de deux containers interagissant ensemble pour former une seule et même application.  Pour ce faire nous utiliserons docker compose un outil de composition des conteneurs simple d’utilisation.
+Ce projet prendra la forme de deux containers interagissant ensemble pour former une seule et même application. Pour ce faire, nous utiliserons docker compose un outil de composition des conteneurs simple d’utilisation.
 
 ------------------- Création de l'application Flask ------------------------
 1) installation de l'environnement :
