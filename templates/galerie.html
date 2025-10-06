@@ -5,10 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Galerie</title>
     <!-- appelation des fichiers css -->
-    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
 </head>
+
 <body>
-    <a class="retouraccueil" href="/"><img class="imageretour" src='../static/galerie.jpg' alt='bouton galerie pokemon'></a>
+    <a class="retouraccueil" href="/">
+        <img class="imageretour" 
+             src="{{url_for('static', filename='img/galerie.jpg')}}" 
+             alt='bouton galerie pokemon'>
+    </a>
     
     {% for image in liste_images %}
         <img src="{{url_for('static', filename=image)}}" alt="Image {{image}}">

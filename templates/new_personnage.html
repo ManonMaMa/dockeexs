@@ -5,21 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ajouter</title>
     <!-- appelation des fichiers css -->
-    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
 </head>
+
 <body>
+    <!-- 
+        Cette page propose d’uploader l’image d’un nouveau personnage sur le serveur. 
+        L’image devra être sauvegardée dans le dossier static/uploaded_images/
+    -->
 
-<a class="retouraccueil" href="/"><img class="imageretour" src='../static/galerie.jpg' alt='bouton galerie pokemon'></a>
+    <!-- Utilisation de la fonction url_for() pour créer des références URL absolues vers les fichiers statiques -->
+    <a class="retouraccueil" href="/">
+        <img class="imageretour" 
+            src="{{url_for('static', filename='img/galerie.jpg')}}" 
+            alt='bouton galerie pokemon'>
+    </a>
 
-<form action="new_personnage" method="post" enctype="multipart/form-data">
-    <input type="file" name="file">
-    <input class="bouton" type="submit" value="Ajouter">
-</form>
+    <form action="new_personnage" method="post" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <input class="bouton" type="submit" value="Ajouter">
+    </form>
 
-<!-- <form action="new_personnage" method="post" enctype="multipart/form-data">
-    <input type="file" name="file" accept="image/*" required>
-    <button type="submit">Upload</button>
-</form> -->
+    <!-- <form action="new_personnage" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept="image/*" required>
+        <button type="submit">Upload</button>
+    </form> -->
 
 </body>
 </html>
