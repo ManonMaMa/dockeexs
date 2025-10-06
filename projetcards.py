@@ -2,6 +2,8 @@ import os
 from flask import Flask, request, render_template
 from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
+from PIL import Image
+import imagehash
 
 # Lors du développement d'une app Flask, mettre :
 #       les fichiers HTML dans un dossier templates/
@@ -21,6 +23,7 @@ class Pokemon(db.Model):
     __tablename__ = 'pokemons'
     id = db.Column(db.Integer, primary_key=True)
     image_pokemon = db.Column(db.String(80), unique=True, nullable=False)
+    hash_image = db.Column(db.String(1000), unique=True, nullable=False)
     nom_pokemon = db.Column(db.String(40), unique=True, nullable=False)
     description_pokemon = db.Column(db.String(400), unique=True, nullable=False)
 
@@ -62,14 +65,24 @@ def upload_file():
         # si l'extension est correcte
         elif allowed_file(file.filename):
             filename = secure_filename(file.filename)                           # Nettoie le nom du fichier pour enlever les caractères dangereux ou les espaces.
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))      # sauvegarde le fichier à l'endroit indiqué
-            add_pokemon(filename, 'pokemon', 'ceci est un pokemon')
+            path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            
+            file.save(path)      # sauvegarde le fichier à l'endroit indiqué
+            img = Image.open(path)
+
+            hash_image_test = imagehash.average_hash(img)
+            app.logger.info('hash -----> ', hash_image_test)
+            
+            hash_pokemon = db.session.execute(db.select(Pokemon).filter_by(hash_image=hash_image_test)).scalar_one()
+
+            if hash_pokemon == 0:
+                add_pokemon(filename, hash_image_test, 'pokemon', 'ceci est un pokemon')
             return render_template('new_personnage.html')
     # s'il ne s'agit pas d'un fichier, redémarrer la page
     return render_template('new_personnage.html')
 
-def add_pokemon(image_pokemon, nom_pokemon, description_pokemon):
-    new_pokemon = Pokemon(image_pokemon=image_pokemon, nom_pokemon=nom_pokemon, description_pokemon=description_pokemon)
+def add_pokemon(image_pokemon, hash_image_test, nom_pokemon, description_pokemon):
+    new_pokemon = Pokemon(image_pokemon=image_pokemon, hash_image=hash_image_test, nom_pokemon=nom_pokemon, description_pokemon=description_pokemon)
     db.session.add(new_pokemon)
     db.session.commit()
 
