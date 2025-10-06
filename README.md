@@ -22,6 +22,13 @@ Ce projet prendra la forme de deux containers interagissant ensemble pour former
         - un lien qui redirige vers la route Flask nommée /galerie ("img/galerie.jpg")
         - un lien qui redirige vers la route Flask nommée /new_personnage (img/ajoutcards.jpg)
     
+4) création de deux pages : galerie.html et new_personnage.html
+    - galerie : bouton de retour à la page d'accueil
+                affiche toutes les images se trouvant dans le dossier uploaded_images
+    - new_personnage :  bouton de retour à la page d'accueil
+                        formulaire pour récupérer un fichier auprès de l'utilisateur
+
+
 
 docker build -t projectcard .
 
