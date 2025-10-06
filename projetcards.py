@@ -63,9 +63,15 @@ def upload_file():
         elif allowed_file(file.filename):
             filename = secure_filename(file.filename)                           # Nettoie le nom du fichier pour enlever les caractères dangereux ou les espaces.
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))      # sauvegarde le fichier à l'endroit indiqué
+            add_pokemon(filename, 'pokemon', 'ceci est un pokemon')
             return render_template('new_personnage.html')
     # s'il ne s'agit pas d'un fichier, redémarrer la page
     return render_template('new_personnage.html')
+
+def add_pokemon(image_pokemon, nom_pokemon, description_pokemon):
+    new_pokemon = Pokemon(image_pokemon=image_pokemon, nom_pokemon=nom_pokemon, description_pokemon=description_pokemon)
+    db.session.add(new_pokemon)
+    db.session.commit()
 
 # Lancement du serveur : mode debug et hot reload actif
 if __name__ == '__main__':
