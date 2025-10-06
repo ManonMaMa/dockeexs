@@ -25,8 +25,6 @@ class Pokemon(db.Model):
     nom_pokemon = db.Column(db.String(40), unique=True, nullable=False)
     description_pokemon = db.Column(db.String(400), unique=True, nullable=False)
 
-db.create_all()
-
 # protection : liste d’extensions de fichiers autorisées
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
@@ -65,5 +63,7 @@ def upload_file():
 
 # Lancement du serveur : mode debug et hot reload actif
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
     app.run(host='0.0.0.0', port=5000, debug=True)
 
