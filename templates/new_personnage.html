@@ -12,9 +12,10 @@
     <!-- 
         Cette page propose d’uploader l’image d’un nouveau personnage sur le serveur. 
         L’image devra être sauvegardée dans le dossier static/uploaded_images/
+        
+        Utilisation de la fonction url_for() pour créer des références URL absolues vers les fichiers statiques
     -->
 
-    <!-- Utilisation de la fonction url_for() pour créer des références URL absolues vers les fichiers statiques -->
     <a class="retouraccueil" href="/">
         <img class="imageretour" 
             src="{{url_for('static', filename='img/galerie.jpg')}}" 
@@ -33,3 +34,5 @@
 
 </body>
 </html>
+
+    <!-- méthode 2 : affichage d'images en utilisant une variable  -->
