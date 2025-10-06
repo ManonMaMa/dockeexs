@@ -15,6 +15,17 @@ app = Flask(__name__)       # __name__ : variable spéciale de python contenant 
 IMG_FOLDER = os.path.join("static", "uploaded_images")      # écriture d'un chemin lisible par tous (windows, linux, mac)
 app.config["UPLOAD_FOLDER"] = IMG_FOLDER                    # indique à Flask le chemin pour faire les sauvegardes
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
+db = SQLAlchemy(app)
+
+# Exemple de modèle
+class Pokemon(db.Model):
+    __tablename__ = 'pokemons'
+    id = db.Column(db.Integer, primary_key=True)
+    image_pokemon = db.Column(db.String(80), unique=True, nullable=False)
+    nom_pokemon = db.Column(db.String(40), unique=True, nullable=False)
+    description_pokemon = db.Column(db.String(400), unique=True, nullable=False)
+
+db.create_all()
 
 # protection : liste d’extensions de fichiers autorisées
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
