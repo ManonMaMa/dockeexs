@@ -38,8 +38,8 @@ def index():
 # Définition d'une route : http://127.0.0.1:5000/galerie
 @app.route("/galerie")
 def galerie():
-    image_list = os.listdir(IMG_FOLDER)
-    image_list = ["uploaded_images/" + image for image in image_list]
+    image_list = os.listdir(IMG_FOLDER)                                     # liste tous les fichiers et sous-dossiers présents dans uploaded_images
+    image_list = ["uploaded_images/" + image for image in image_list]       # dans la liste ajoute devant chaque fichier : "uploaded_images/"
     return render_template('galerie.html', liste_images=image_list)
 
 # vérifier que le nom du fichier à une extension qui se trouve dans ALLOWED_EXTENSIONS
