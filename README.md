@@ -18,9 +18,9 @@ Ce projet prendra la forme de deux containers interagissant ensemble pour former
     utilisation de la fonction render_templates()
 
 3) fichier index.html
-    utilisation de la fonction url_for()
-    un lien qui redirige vers la route Flask nommée /galerie
-    un lien qui redirige vers la route Flask nommée /new_personnage
+    utilisation de la fonction url_for(), avec l'affichage d'images sans utiliser de variable :
+        - un lien qui redirige vers la route Flask nommée /galerie ("img/galerie.jpg")
+        - un lien qui redirige vers la route Flask nommée /new_personnage (img/ajoutcards.jpg)
     
 
 docker build -t projectcard .
