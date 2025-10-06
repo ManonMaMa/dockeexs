@@ -10,12 +10,6 @@ from flask_sqlalchemy import SQLAlchemy
 # création de l'application Flask (on indique que ce fichier est le fichier principal)
 app = Flask(__name__)       # __name__ : variable spéciale de python contenant le nom de ce fichier
 
-# Définition de la route principale :  http://127.0.0.1:5000/
-# methode 1 : affichage d'images sans utiliser de variable
-@app.route("/")                             
-def index():
-    return render_template('index.html')        # fonction de Flask qui va chercher index.html dans le dossier templates/
-
 # gestion des fichiers uploadés (images envoyées par un formulaire)
 IMG_FOLDER = os.path.join('static', 'uploaded_images')      # écriture d'un chemin lisible par tous (windows, linux, mac)
 app.config["UPLOAD_FOLDER"] = IMG_FOLDER                    # indique à Flask le chemin pour faire les sauvegardes

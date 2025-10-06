@@ -3,6 +3,7 @@ services:
   web:
     # même utilité que la commande build
     build: .
+    restart: always
     ports:
       - "5050:5000"
     depends_on:
