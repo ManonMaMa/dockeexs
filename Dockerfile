@@ -15,8 +15,8 @@ COPY requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
 
 # copie de notre répertoire locale vers le répertoire de l'image Docker
-COPY . .
+# COPY . .  # la copie a été déplacée dans le fichier docker compose.
 
 # CMD : commande par défaut au démarrage du container
 # appelle l'interpréteur Python 3 et exécute le fichier projetcards qui se trouve dans l'image
-CMD ["python3", "projetcards.py"]
+CMD ["python3", "/app/projetcards.py"]
