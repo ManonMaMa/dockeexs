@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
 from PIL import Image
@@ -31,8 +31,8 @@ class Pokemon(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     image_pokemon = db.Column(db.String(80), unique=True, nullable=False)
     hash_image = db.Column(db.String(1000), unique=True, nullable=False)
-    nom_pokemon = db.Column(db.String(40), unique=True, nullable=False)
-    description_pokemon = db.Column(db.String(400), unique=True, nullable=False)
+    nom_pokemon = db.Column(db.String(40), nullable=False)
+    description_pokemon = db.Column(db.String(400), nullable=False)
 
 # protection : liste d’extensions de fichiers autorisées
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
@@ -45,9 +45,15 @@ def index():
 # Définition d'une route : http://127.0.0.1:5000/galerie
 @app.route("/galerie")
 def galerie():
-    image_list = os.listdir(IMG_FOLDER)                                     # liste tous les fichiers et sous-dossiers présents dans uploaded_images
-    image_list = ["uploaded_images/" + image for image in image_list]       # dans la liste ajoute devant chaque fichier : "uploaded_images/"
-    return render_template('galerie.html', liste_images=image_list)
+    # image_list = os.listdir(IMG_FOLDER)                                     # liste tous les fichiers et sous-dossiers présents dans uploaded_images
+    # image_list = ["uploaded_images/" + image for image in image_list]       # dans la liste ajoute devant chaque fichier : "uploaded_images/"
+    # return render_template('galerie.html', liste_images=image_list)
+    try:
+        # Récupérer tous les utilisateurs dans la table Pokemon et les renvoyer dans une liste
+        pokemons = Pokemon.query.all()
+        return render_template('galerie.html', liste_pokemons = pokemons)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500  # Gestion des erreurs
 
 # vérifier que le nom du fichier à une extension qui se trouve dans ALLOWED_EXTENSIONS
 def allowed_file(filename):
@@ -56,7 +62,6 @@ def allowed_file(filename):
     # transforme l’extension en minuscules
     # return true si l'extension se trouve dans ALLOWED_EXTENSIONS, false sinon
     return filename.split('.')[1].lower() in ALLOWED_EXTENSIONS
-
 
 # Définition d'une route : http://127.0.0.1:5000/new_personnage
 @app.route('/new_personnage', methods=['GET', 'POST'])
@@ -74,20 +79,13 @@ def upload_file():
         elif allowed_file(file.filename):
             filename = secure_filename(file.filename)                           # nettoie le nom du fichier pour enlever les caractères dangereux ou les espaces.
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)      # indique quel chemin prendre jusqu'au fichier filename
-            
-            app.logger.info(f'file.filename -----> {file.filename}')
-            app.logger.info(f'filename -----> {filename}')
-            app.logger.info(f'filepath -----> {filepath}')
 
             file.save(filepath)                 # sauvegarde le fichier à l'endroit indiqué
             img = Image.open(filepath)
 
             hash_image_test = str(imagehash.average_hash(img))
-            app.logger.info(f'hash -----> {hash_image_test}')
 
             hash_pokemon = db.session.execute(db.select(Pokemon).filter_by(hash_image=hash_image_test)).scalar_one_or_none()
-
-            app.logger.info(f'hash -----> {hash_pokemon}')
 
             if hash_pokemon is None:
                 add_pokemon(filename, hash_image_test, 'pokemon', 'ceci est un pokemon')
@@ -96,7 +94,7 @@ def upload_file():
     return render_template('new_personnage.html')
 
 def add_pokemon(image_pokemon, hash_image_test, nom_pokemon, description_pokemon):
-    new_pokemon = Pokemon(image_pokemon=image_pokemon, hash_image=hash_image_test, nom_pokemon=nom_pokemon, description_pokemon=description_pokemon)
+    new_pokemon = Pokemon(image_pokemon= 'uploaded_images/' + image_pokemon, hash_image=hash_image_test, nom_pokemon=nom_pokemon, description_pokemon=description_pokemon)
     db.session.add(new_pokemon)
     db.session.commit()
 
