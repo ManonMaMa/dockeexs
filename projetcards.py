@@ -56,24 +56,11 @@ def upload_file():
         if file.filename == '':
             return render_template('new_personnage.html')
 
-        # Si l'extension est correcte, traite l'image.
-        elif allowed_file(file.filename):
-            filename = secure_filename(file.filename)                           # Nettoie le nom du fichier pour enlever les caractères dangereux ou les espaces.
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)      # Indique quel chemin prendre jusqu'au fichier filename.
-
-            file.save(filepath)                 # Sauvegarde le fichier à l'endroit indiqué.
-            img = Image.open(filepath)
-
-            hash_image_test = str(imagehash.average_hash(img))
-
-            hash_pokemon = database.session.execute(database.select(Pokemon).filter_by(hash_image=hash_image_test)).scalar_one_or_none()
-
-            if hash_pokemon is None:
-                infos_pokemon = get_image_description(filepath)
-                add_pokemon(filename, hash_image_test, infos_pokemon["nom"], infos_pokemon["description"])
+        # Si l'extension est correcte, traite l'image; sinon, ne fait rien et recharge la page.
+        elif is_file_allowed(file.filename):
+            save_file(file)
             return render_template('new_personnage.html')
 
-    # S'il ne s'agit pas d'un fichier, redémarrer la page.
     return render_template('new_personnage.html')
 
 
@@ -88,12 +75,28 @@ class Pokemon(database.Model):
 
 
 # Vérifier que le nom du fichier à une extension qui se trouve dans ALLOWED_EXTENSIONS.
-def allowed_file(filename):
+def is_file_allowed(filename):
     # Divise le nom du fichier en liste en séparant par le caractère "point".
     # [1] : prend la deuxième partie.
     # Transforme l’extension en minuscules.
     # Return true si l'extension se trouve dans ALLOWED_EXTENSIONS, false sinon.
     return filename.split('.')[1].lower() in config.ALLOWED_EXTENSIONS
+
+
+def save_file(file):
+    """Enregistre le fichier donné dans le dossier d'images, puis crée un nom et une description pour l'image si elle n'est pas déjà dans la base de données."""
+    filename = secure_filename(file.filename)                           # Nettoie le nom du fichier pour enlever les caractères dangereux ou les espaces.
+    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)      # Indique quel chemin prendre jusqu'au fichier filename.
+
+    file.save(filepath)                 # Sauvegarde le fichier à l'endroit indiqué.
+
+    img = Image.open(filepath)
+    hash_image = str(imagehash.average_hash(img))
+    hash_pokemon = database.session.execute(database.select(Pokemon).filter_by(hash_image=hash_image)).scalar_one_or_none()
+
+    if hash_pokemon is None:
+        infos_pokemon = get_image_description(filepath)
+        add_pokemon(filename, hash_image, infos_pokemon["nom"], infos_pokemon["description"])
 
 
 def add_pokemon(image_pokemon, hash_image_test, nom_pokemon, description_pokemon):
@@ -117,7 +120,7 @@ def get_image_description(image_path):
       url="https://openrouter.ai/api/v1/chat/completions",
 
       headers={
-        "Authorization": f"Bearer {config.OPENROUTER_KEY}"
+        "Authorization": f"Bearer {config.OPENROUTER_KEY_2}"
       },
 
       data=json.dumps({
@@ -151,7 +154,7 @@ def get_image_description(image_path):
         url="https://openrouter.ai/api/v1/chat/completions",
 
         headers={
-            "Authorization": f"Bearer {config.OPENROUTER_KEY}"
+            "Authorization": f"Bearer {config.OPENROUTER_KEY_2}"
         },
 
         data=json.dumps({

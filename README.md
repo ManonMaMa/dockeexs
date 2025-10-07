@@ -5,9 +5,15 @@ Ce projet prendra la forme de deux containers interagissant ensemble pour former
 
 ## Sommaire
 - [Installation](#installation)
-- [création du fichier principal projetcards](#création-du-fichier-principal-projetcards)
-- [fichier index](#fichier-index)
-- [création de deux pages](#création-de-deux-pages)
+- [Création du fichier principal projetcards](#creation-du-fichier-principal-projetcards)
+- [Fichier index](#fichier-index)
+- [Création de deux pages](#creation-de-deux-pages)
+- [Création de fichiers](#creation-de-fichiers)
+- [Construction de l'image initiale](#construction-de-l-image-initiale)
+- [Fichier index](#fichier-index)
+- [Fichier index](#fichier-index)
+- [Fichier index](#fichier-index)
+- [Fichier index](#fichier-index)
 
 ------------------- Création de l'application Flask ------------------------
 
@@ -18,7 +24,7 @@ Ce projet prendra la forme de deux containers interagissant ensemble pour former
 &emsp;&emsp;.venv\Scripts\activate&emsp;# activation de l'environnement  
 &emsp;&emsp;python -m pip install Flask &emsp;# installation de Flask  
 
-## création du fichier principal projetcards
+## Création du fichier principal projetcards
 &emsp;utilisation de la fonction app.route()  
 &emsp;&emsp;http://127.0.0.1:5000/  
 &emsp;&emsp;http://127.0.0.1:5000/galerie  
@@ -26,25 +32,32 @@ Ce projet prendra la forme de deux containers interagissant ensemble pour former
 
 &emsp;utilisation de la fonction render_templates()
 
-## fichier index
-&emsp;utilisation de la fonction url_for(), avec l'affichage d'images sans utiliser de variable :  
-&emsp;&emsp;- un lien qui redirige vers la route Flask nommée /galerie ("img/galerie.jpg")  
-&emsp;&emsp;- un lien qui redirige vers la route Flask nommée /new_personnage (img/ajoutcards.jpg)
+## Fichier index
+&emsp;Utilisation de la fonction url_for(), avec l'affichage d'images sans utiliser de variable :  
+&emsp;&emsp;- Un lien qui redirige vers la route Flask nommée /galerie ("img/galerie.jpg").  
+&emsp;&emsp;- Un lien qui redirige vers la route Flask nommée /new_personnage (img/ajoutcards.jpg).
     
-## création de deux pages
+## Création de deux pages
 &emsp;galerie :  
-&emsp;&emsp;bouton de retour à la page d'accueil  
-&emsp;&emsp;affiche toutes les images se trouvant dans le dossier uploaded_images
+&emsp;&emsp;Bouton de retour à la page d'accueil.  
+&emsp;&emsp;Affiche toutes les images se trouvant dans le dossier uploaded_images.
 
 &emsp;new_personnage :  
-&emsp;&emsp;bouton de retour à la page d'accueil  
-&emsp;&emsp;formulaire pour récupérer un fichier auprès de l'utilisateur
+&emsp;&emsp;Bouton de retour à la page d'accueil.  
+&emsp;&emsp;Formulaire pour récupérer un fichier auprès de l'utilisateur.
 
 
 ------------------- conteneurisation de l'application Flask  ------------------------
 
+## Création de fichiers   
+&emsp;requirements.txt : fichier des dépendances  
+&emsp;Dockerfile : fichier pour la construction de l'image  
 
+## Construction de l'image initiale  
+&emsp;Ouvrir Docker Desktop  
+```Bash 
+docker build -t projectcards .  
+docker images  
+docker run -v cheminAbsoluJusqua/dockeexs:/python-docker -p 5000:5000 projectcards  
+```  
 
-docker build -t projectcard .
-
-docker run -v C:\Users\Utilisateur\Bureau\code\dockeexs:/python-docker -p 5000:5000 projectcard
