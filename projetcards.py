@@ -68,15 +68,15 @@ def upload_file():
             filename = secure_filename(file.filename)                           # nettoie le nom du fichier pour enlever les caractères dangereux ou les espaces.
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)          # indique quel chemin prendre 
             
-            app.logger.info('file.filename -----> ', file.filename)
-            app.logger.info('filename -----> ', filename)
-            app.logger.info('filepath -----> ', filepath)
+            app.logger.info(f'file.filename -----> {file.filename}')
+            app.logger.info(f'filename -----> {filename}')
+            app.logger.info(f'filepath -----> {filepath}')
 
             file.save(filepath)      # sauvegarde le fichier à l'endroit indiqué
             img = Image.open(filepath)
 
             hash_image_test = str(imagehash.average_hash(img))
-            app.logger.info('hash -----> ', hash_image_test)
+            app.logger.info(f'hash -----> {hash_image_test}')
 
             hash_pokemon = db.session.execute(db.select(Pokemon).filter_by(hash_image=hash_image_test)).scalar_one_or_none()
 
