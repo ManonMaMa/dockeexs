@@ -11,17 +11,23 @@
 <body>
     <a class="retouraccueil" href="/">
         <img class="imageretour" 
-             src="{{url_for('static', filename='img/galerie.jpg')}}" 
-             alt="bouton retour à l'accueil">
+            src="{{url_for('static', filename='img/OIP.webp')}}" 
+            alt="bouton retour à l'accueil">
     </a>
+
+    <div class="titre">Galerie Pokemon</div>
     
     <!-- boucle qui parcourt liste_pokemons transmis par le render_template() -->
-    {% for pokemon in liste_pokemons %}
-        <div class="cards">
-            <p> {{ pokemon.nom_pokemon }} </p>
-            <img class='imgcards' src="{{url_for('static', filename=pokemon.image_pokemon)}}" alt="Voici le nom de l'image : {{image_pokemon}}"> <!-- affiche l'image -->
-            <p> {{ pokemon.description_pokemon }} </p>
-        </div>
-    {% endfor %}
+    {% if isNotEmpty %}
+        {% for pokemon in liste_pokemons %}
+            <div class="cards">
+                <p> {{ pokemon.nom_pokemon }} </p>
+                <img class='imgcards' src="{{url_for('static', filename=pokemon.image_pokemon)}}" alt="Voici le nom de l'image : {{image_pokemon}}"> <!-- affiche l'image -->
+                <p> {{ pokemon.description_pokemon }} </p>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>La galerie est vide</p>
+    {% endif %}
 </body>
 </html>

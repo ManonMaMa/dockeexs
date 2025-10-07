@@ -17,9 +17,11 @@
     <!-- Utilisation de la fonction url_for() pour créer des références URL absolues vers les fichiers statiques -->
     <a class="retouraccueil" href="/">
         <img class="imageretour" 
-            src="{{url_for('static', filename='img/galerie.jpg')}}" 
+            src="{{url_for('static', filename='img/OIP.webp')}}" 
             alt="bouton retour à l'accueil">
     </a>
+
+    <div class="titre">Nouveau Pokemon</div>
 
     <form action="new_personnage" method="post" enctype="multipart/form-data">
         <input type="file" name="file">

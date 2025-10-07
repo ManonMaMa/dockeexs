@@ -1,4 +1,16 @@
+@font-face {
+    font-family: 'octo';
+    src:
+    url("../police/tenbyfive/tenby-five.otf") format("truetype");
+  }
+
+div{
+    font-family: 'octo';
+    font-size: 4vw;
+}
+
 p{
+    font-family: 'octo';
     color : red
 }
 
@@ -27,8 +39,9 @@ body{
 }
 
 .imageretour{
-    width : 2vw;
-    border-radius : 1vw;
+    width :4.5vw;
+    border-radius : 1.6vw;
+    transform: rotate(270deg);
 }
 
 .lien{
@@ -45,14 +58,22 @@ body{
 
 .retouraccueil{
     position: fixed;
-    left: 2vw;
-    top: 2vw;
+    left: 1vw;
+    top: 1vw;
 }
 
 input{
-    color : white
+    color : white;
 }
 
 .bouton{
-    color : green
+    color : green;
+}
+
+.titre{
+    width: 99vw;
+    color : lightskyblue;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 4vw;
 }
