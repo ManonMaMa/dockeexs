@@ -80,7 +80,9 @@ def upload_file():
 
             hash_pokemon = db.session.execute(db.select(Pokemon).filter_by(hash_image=hash_image_test)).scalar_one_or_none()
 
-            if hash_pokemon == 0:
+            app.logger.info(f'hash -----> {hash_pokemon}')
+
+            if hash_pokemon is None:
                 add_pokemon(filename, hash_image_test, 'pokemon', 'ceci est un pokemon')
             return render_template('new_personnage.html')
     # s'il ne s'agit pas d'un fichier, redémarrer la page
