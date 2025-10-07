@@ -13,7 +13,7 @@ import imagehash
 app = Flask(__name__)       # __name__ : variable spéciale de python contenant le nom de ce fichier
 
 # gestion des fichiers uploadés (images envoyées par un formulaire)
-IMG_FOLDER = os.path.join('static', 'uploaded_images')      # écriture d'un chemin lisible par tous (windows, linux, mac)
+IMG_FOLDER = '/app/static/uploaded_images'                  # écriture d'un chemin lisible par tous (windows, linux, mac)
 app.config["UPLOAD_FOLDER"] = IMG_FOLDER                    # indique à Flask le chemin pour faire les sauvegardes
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 db = SQLAlchemy(app)
@@ -50,6 +50,7 @@ def allowed_file(filename):
     # return true si l'extension se trouve dans ALLOWED_EXTENSIONS, false sinon
     return filename.split('.')[1].lower() in ALLOWED_EXTENSIONS
 
+
 # Définition d'une route : http://127.0.0.1:5000/new_personnage
 @app.route('/new_personnage', methods=['GET', 'POST'])
 def upload_file():
@@ -57,23 +58,27 @@ def upload_file():
     if request.method == 'POST':
         # si request.files est vide car 'file' n'a pas été transmis du tout
         if 'file' not in request.files:
-            return render_template('new_personnage.html')
+            return render_template('index.html')
         file = request.files['file']        # variable file qui récupère le fichier 'file' envoyé par l'utilisateur
         # si le nom du fichier est vide 
         if file.filename == '':
-            return render_template('new_personnage.html')
+            return render_template('index.html')
         # si l'extension est correcte
         elif allowed_file(file.filename):
             filename = secure_filename(file.filename)                           # Nettoie le nom du fichier pour enlever les caractères dangereux ou les espaces.
-            path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             
-            file.save(path)      # sauvegarde le fichier à l'endroit indiqué
-            img = Image.open(path)
+            app.logger.info('file.filename -----> ', file.filename)
+            app.logger.info('filename -----> ', filename)
+            app.logger.info('filepath -----> ', filepath)
 
-            hash_image_test = imagehash.average_hash(img)
+            file.save(filepath)      # sauvegarde le fichier à l'endroit indiqué
+            img = Image.open(filepath)
+
+            hash_image_test = str(imagehash.average_hash(img))
             app.logger.info('hash -----> ', hash_image_test)
-            
-            hash_pokemon = db.session.execute(db.select(Pokemon).filter_by(hash_image=hash_image_test)).scalar_one()
+
+            hash_pokemon = db.session.execute(db.select(Pokemon).filter_by(hash_image=hash_image_test)).scalar_one_or_none()
 
             if hash_pokemon == 0:
                 add_pokemon(filename, hash_image_test, 'pokemon', 'ceci est un pokemon')
