@@ -6,9 +6,9 @@ from PIL import Image
 import imagehash
 import requests
 import json
+import base64
 
 OPENROUTER_KEY = "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"
-
 
 # Lors du développement d'une app Flask, mettre :
 #       les fichiers HTML dans un dossier templates/
@@ -22,7 +22,6 @@ IMG_FOLDER = '/app/static/uploaded_images'                  # écriture d'un che
 app.config["UPLOAD_FOLDER"] = IMG_FOLDER                    # indique à Flask le chemin pour faire les sauvegardes
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 db = SQLAlchemy(app)
-
 
 
 # Exemple de modèle
@@ -90,17 +89,30 @@ def upload_file():
             hash_pokemon = db.session.execute(db.select(Pokemon).filter_by(hash_image=hash_image_test)).scalar_one_or_none()
 
             if hash_pokemon is None:
-                add_pokemon(filename, hash_image_test, 'pokemon', 'ceci est un pokemon')
+                infos_pokemon = get_image_description(filepath)
+                add_pokemon(filename, hash_image_test, infos_pokemon["nom"], infos_pokemon["description"])
             return render_template('new_personnage.html')
     # s'il ne s'agit pas d'un fichier, redémarrer la page
     return render_template('new_personnage.html')
+
 
 def add_pokemon(image_pokemon, hash_image_test, nom_pokemon, description_pokemon):
     new_pokemon = Pokemon(image_pokemon= 'uploaded_images/' + image_pokemon, hash_image=hash_image_test, nom_pokemon=nom_pokemon, description_pokemon=description_pokemon)
     db.session.add(new_pokemon)
     db.session.commit()
 
-def get_image_description(image):
+
+def get_image_description(image_path):
+    # Read and encode the image
+    base64_image = encode_image_to_base64(image_path)
+    image_type = "png"
+    if image_path.endswith(".jpg"):
+        image_type = "jpeg"
+    elif image_path.endswith(".png"):
+        image_type = "png"
+
+    data_url = f"data:image/{image_type};base64,{base64_image}"
+
     response = requests.post(
       url="https://openrouter.ai/api/v1/chat/completions",
 
@@ -113,15 +125,65 @@ def get_image_description(image):
         "messages": [
           {
             "role": "user",
-            "content": "Hello?"
+            "content": [
+                {
+                    "type": "text",
+                    "text": "Voici l'image d'un nouveau pokémon. En partant de l'image, crée un nom pour ce pokémon et renvoie-moi UNIQUEMENT ce nom."
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": data_url
+                    }
+                }
+            ]
           }
         ]
       })
     )
 
+    app.logger.info(f"response nom -------> {response}")
+    response = response.json()
+    app.logger.info(f"response nom -------> {response}")
+    nom = response["choices"][0]["message"]["content"]
+
+    response = requests.post(
+        url="https://openrouter.ai/api/v1/chat/completions",
+
+        headers={
+            "Authorization": f"Bearer {OPENROUTER_KEY}"
+        },
+
+        data=json.dumps({
+            "model": "meta-llama/llama-4-scout:free",  # Optional
+            "messages": [
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": f"Voici l'image d'un nouveau pokémon qui s'appelle {nom}. Crée une description de 200 à 300 caractères pour ce pokémon et renvoie-moi UNIQUEMENT cette description."
+                        },
+                        {
+                            "type": "image_url",
+                            "image_url": {
+                                "url": data_url
+                            }
+                        }
+                    ]
+                }
+            ]
+        })
+    )
+
     response = response.json()
     description = response["choices"][0]["message"]["content"]
-    return description
+    return {"nom": nom, "description": description}
+
+
+def encode_image_to_base64(image_path):
+    with open(image_path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode('utf-8')
 
 
 # Lancement du serveur : mode debug et hot reload actif
