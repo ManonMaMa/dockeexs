@@ -5,8 +5,11 @@ Ce projet prendra la forme de deux containers interagissant ensemble pour former
 ------------------- Création de l'application Flask ------------------------
 1) installation de l'environnement :
     sur le terminal, se placer dans le dossier du projet
+
        py -3 -m venv .venv                # environnement virtuel
+
        .venv\Scripts\activate             # activation de l'environnement
+       
        python -m pip install Flask        # installation de Flask
 
 2) création du fichier principal projetcards.py
