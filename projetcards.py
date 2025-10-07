@@ -4,6 +4,11 @@ from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
 from PIL import Image
 import imagehash
+import requests
+import json
+
+OPENROUTER_KEY = "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"
+
 
 # Lors du développement d'une app Flask, mettre :
 #       les fichiers HTML dans un dossier templates/
@@ -17,6 +22,8 @@ IMG_FOLDER = '/app/static/uploaded_images'                  # écriture d'un che
 app.config["UPLOAD_FOLDER"] = IMG_FOLDER                    # indique à Flask le chemin pour faire les sauvegardes
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 db = SQLAlchemy(app)
+
+
 
 # Exemple de modèle
 class Pokemon(db.Model):
@@ -92,6 +99,30 @@ def add_pokemon(image_pokemon, hash_image_test, nom_pokemon, description_pokemon
     new_pokemon = Pokemon(image_pokemon=image_pokemon, hash_image=hash_image_test, nom_pokemon=nom_pokemon, description_pokemon=description_pokemon)
     db.session.add(new_pokemon)
     db.session.commit()
+
+def get_image_description(image):
+    response = requests.post(
+      url="https://openrouter.ai/api/v1/chat/completions",
+
+      headers={
+        "Authorization": f"Bearer {OPENROUTER_KEY}"
+      },
+
+      data=json.dumps({
+        "model": "meta-llama/llama-4-scout:free", # Optional
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello?"
+          }
+        ]
+      })
+    )
+
+    response = response.json()
+    description = response["choices"][0]["message"]["content"]
+    return description
+
 
 # Lancement du serveur : mode debug et hot reload actif
 if __name__ == '__main__':
