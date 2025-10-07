@@ -65,8 +65,8 @@ def upload_file():
             return render_template('index.html')
         # si l'extension est correcte
         elif allowed_file(file.filename):
-            filename = secure_filename(file.filename)                           # Nettoie le nom du fichier pour enlever les caractères dangereux ou les espaces.
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            filename = secure_filename(file.filename)                           # nettoie le nom du fichier pour enlever les caractères dangereux ou les espaces.
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)          # indique quel chemin prendre 
             
             app.logger.info('file.filename -----> ', file.filename)
             app.logger.info('filename -----> ', filename)

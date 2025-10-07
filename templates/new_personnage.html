@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ajouter</title>
-    <!-- appellation des fichiers css -->
+    <!-- appel des fichiers css -->
     <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
 </head>
 
@@ -19,7 +19,7 @@
     <a class="retouraccueil" href="/">
         <img class="imageretour" 
             src="{{url_for('static', filename='img/galerie.jpg')}}" 
-            alt='bouton galerie pokemon'>
+            alt="bouton retour à l'accueil">
     </a>
 
     <form action="new_personnage" method="post" enctype="multipart/form-data">
@@ -35,4 +35,3 @@
 </body>
 </html>
 
-    <!-- méthode 2 : affichage d'images en utilisant une variable  -->
