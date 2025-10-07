@@ -42,16 +42,8 @@ def galerie():
     # image_list = ["uploaded_images/" + image for image in image_list]       # dans la liste ajoute devant chaque fichier : "uploaded_images/"
     # return render_template('galerie.html', liste_images=image_list)
     try:
-        # Récupérer tous les utilisateurs dans la table Pokemon
+        # Récupérer tous les utilisateurs dans la table Pokemon et les renvoyer dans une liste
         pokemons = Pokemon.query.all()
-        app.logger.info(f'pokemons -----> {pokemons[0].image_pokemon}')
-        app.logger.info(f'pokemons -----> {pokemons[0].nom_pokemon}')
-        app.logger.info(f'pokemons -----> {pokemons[0].description_pokemon}')
-
-        # Transformer les objets en dictionnaires
-        # pokemons_list = [{"id": pokemon.id, "image_pokemon": pokemon.image_pokemon, "nom_pokemon": pokemons.nom_pokemon, "description_pokemon": pokemons.description_pokemon} for pokemon in pokemons]
-        
-        # return jsonify(pokemons_list), 200  # Retourne les données avec un code HTTP 200
         return render_template('galerie.html', liste_pokemons = pokemons)
     except Exception as e:
         return jsonify({"error": str(e)}), 500  # Gestion des erreurs
