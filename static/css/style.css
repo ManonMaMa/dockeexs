@@ -77,3 +77,10 @@ input{
     justify-content: center;
     margin-bottom: 4vw;
 }
+
+#preview {
+    margin-top: 10px;
+    max-width: 300px;
+    max-height: 300px;
+    display: none;
+}
