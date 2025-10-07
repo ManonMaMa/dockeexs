@@ -128,7 +128,7 @@ def get_image_description(image_path):
             "content": [
                 {
                     "type": "text",
-                    "text": "Voici l'image d'un nouveau pokémon. En partant de l'image, crée un nom pour ce pokémon."
+                    "text": "Voici l'image d'un nouveau pokémon. En partant de l'image, crée un nom pour ce pokémon et renvoie-moi UNIQUEMENT ce nom."
                 },
                 {
                     "type": "image_url",
@@ -162,7 +162,7 @@ def get_image_description(image_path):
                     "content": [
                         {
                             "type": "text",
-                            "text": f"Voici l'image d'un nouveau pokémon qui s'appelle {nom}. Crée une description de 200 à 300 caractères pour ce pokémon."
+                            "text": f"Voici l'image d'un nouveau pokémon qui s'appelle {nom}. Crée une description de 200 à 300 caractères pour ce pokémon et renvoie-moi UNIQUEMENT cette description."
                         },
                         {
                             "type": "image_url",
