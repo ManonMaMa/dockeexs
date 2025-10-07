@@ -14,9 +14,9 @@ Ce projet prendra la forme de deux containers interagissant ensemble pour former
 
 ## Installation
 1. sur le terminal, se placer dans le dossier du projet  
-        py -3 -m venv .venv                # environnement virtuel  
-        .venv\Scripts\activate             # activation de l'environnement  
-        python -m pip install Flask        # installation de Flask  
+&emsp;&emsp;py -3 -m venv .venv                # environnement virtuel  
+&emsp;&emsp;.venv\Scripts\activate             # activation de l'environnement  
+&emsp;&emsp;python -m pip install Flask        # installation de Flask  
 
 2) création du fichier principal projetcards.py
 
