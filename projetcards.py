@@ -56,7 +56,6 @@ def allowed_file(filename):
     # return true si l'extension se trouve dans ALLOWED_EXTENSIONS, false sinon
     return filename.split('.')[1].lower() in ALLOWED_EXTENSIONS
 
-
 # Définition d'une route : http://127.0.0.1:5000/new_personnage
 @app.route('/new_personnage', methods=['GET', 'POST'])
 def upload_file():
@@ -73,20 +72,13 @@ def upload_file():
         elif allowed_file(file.filename):
             filename = secure_filename(file.filename)                           # nettoie le nom du fichier pour enlever les caractères dangereux ou les espaces.
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)      # indique quel chemin prendre jusqu'au fichier filename
-            
-            app.logger.info(f'file.filename -----> {file.filename}')
-            app.logger.info(f'filename -----> {filename}')
-            app.logger.info(f'filepath -----> {filepath}')
 
             file.save(filepath)                 # sauvegarde le fichier à l'endroit indiqué
             img = Image.open(filepath)
 
             hash_image_test = str(imagehash.average_hash(img))
-            app.logger.info(f'hash -----> {hash_image_test}')
 
             hash_pokemon = db.session.execute(db.select(Pokemon).filter_by(hash_image=hash_image_test)).scalar_one_or_none()
-
-            app.logger.info(f'hash -----> {hash_pokemon}')
 
             if hash_pokemon is None:
                 add_pokemon(filename, hash_image_test, 'pokemon', 'ceci est un pokemon')
