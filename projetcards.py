@@ -7,8 +7,8 @@ import imagehash
 import requests
 import json
 import base64
+import config
 
-OPENROUTER_KEY = "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"
 
 # Lors du développement d'une app Flask, mettre :
 #       les fichiers HTML dans un dossier templates/
@@ -18,8 +18,7 @@ OPENROUTER_KEY = "sk-or-v1-fff95d89541b9b16e9e7bbd5da67146f5da3506887e7730606dc1
 app = Flask(__name__)       # __name__ : variable spéciale de python contenant le nom de ce fichier
 
 # gestion des fichiers uploadés (images envoyées par un formulaire)
-IMG_FOLDER = '/app/static/uploaded_images'                  # écriture d'un chemin lisible par tous (windows, linux, mac)
-app.config["UPLOAD_FOLDER"] = IMG_FOLDER                    # indique à Flask le chemin pour faire les sauvegardes
+app.config["UPLOAD_FOLDER"] = config.IMG_FOLDER                    # indique à Flask le chemin pour faire les sauvegardes
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 db = SQLAlchemy(app)
 
@@ -33,28 +32,28 @@ class Pokemon(db.Model):
     nom_pokemon = db.Column(db.String(40), nullable=False)
     description_pokemon = db.Column(db.String(400), nullable=False)
 
-# protection : liste d’extensions de fichiers autorisées
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 # Définition de la route principale : http://127.0.0.1:5000/
 @app.route("/")                             
 def index():
     return render_template('index.html')        # fonction de Flask qui va chercher index.html dans le dossier templates/
 
+
 # Définition d'une route : http://127.0.0.1:5000/galerie
 @app.route("/galerie")
 def galerie():
-    # image_list = os.listdir(IMG_FOLDER)                                     # liste tous les fichiers et sous-dossiers présents dans uploaded_images
-    # image_list = ["uploaded_images/" + image for image in image_list]       # dans la liste ajoute devant chaque fichier : "uploaded_images/"
+    # image_list = os.listdir(config.IMG_FOLDER)                            # liste tous les fichiers et sous-dossiers présents dans uploaded_images
+    # image_list = ["uploaded_images/" + image for image in image_list]     # dans la liste ajoute devant chaque fichier : "uploaded_images/"
     # return render_template('galerie.html', liste_images=image_list)
     try:
         # Récupérer tous les utilisateurs dans la table Pokemon et les renvoyer dans une liste
         pokemons = Pokemon.query.all()
-        isNotEmpty = len(pokemons) > 0 
+        is_not_empty = len(pokemons) > 0
 
-        return render_template('galerie.html', liste_pokemons = pokemons, isNotEmpty=isNotEmpty)
+        return render_template('galerie.html', liste_pokemons = pokemons, is_not_empty=is_not_empty)
     except Exception as e:
         return jsonify({"error": str(e)}), 500  # Gestion des erreurs
+
 
 # vérifier que le nom du fichier à une extension qui se trouve dans ALLOWED_EXTENSIONS
 def allowed_file(filename):
@@ -62,7 +61,8 @@ def allowed_file(filename):
     # [1] : prend la deuxième partie
     # transforme l’extension en minuscules
     # return true si l'extension se trouve dans ALLOWED_EXTENSIONS, false sinon
-    return filename.split('.')[1].lower() in ALLOWED_EXTENSIONS
+    return filename.split('.')[1].lower() in config.ALLOWED_EXTENSIONS
+
 
 # Définition d'une route : http://127.0.0.1:5000/new_personnage
 @app.route('/new_personnage', methods=['GET', 'POST'])
@@ -117,7 +117,7 @@ def get_image_description(image_path):
       url="https://openrouter.ai/api/v1/chat/completions",
 
       headers={
-        "Authorization": f"Bearer {OPENROUTER_KEY}"
+        "Authorization": f"Bearer {config.OPENROUTER_KEY}"
       },
 
       data=json.dumps({
@@ -151,7 +151,7 @@ def get_image_description(image_path):
         url="https://openrouter.ai/api/v1/chat/completions",
 
         headers={
-            "Authorization": f"Bearer {OPENROUTER_KEY}"
+            "Authorization": f"Bearer {config.OPENROUTER_KEY}"
         },
 
         data=json.dumps({
