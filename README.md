@@ -19,9 +19,9 @@ Ce projet prendra la forme de deux containers interagissant ensemble pour former
 &emsp;&emsp;python -m pip install Flask &emsp;# installation de Flask  
 
 ## création du fichier principal projetcards
-&emsp;utilisation de la fonction app.route()
-&emsp;&emsp;http://127.0.0.1:5000/
-&emsp;&emsp;http://127.0.0.1:5000/galerie
+&emsp;utilisation de la fonction app.route()  
+&emsp;&emsp;http://127.0.0.1:5000/  
+&emsp;&emsp;http://127.0.0.1:5000/galerie  
 &emsp;&emsp;http://127.0.0.1:5000/new_personnage
 
 &emsp;utilisation de la fonction render_templates()
