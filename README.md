@@ -14,10 +14,11 @@ Ce projet prendra la forme de deux containers interagissant ensemble pour former
 
 ## Installation
 1. sur le terminal, se placer dans le dossier du projet
+
     `py -3 -m venv .venv`                # environnement virtuel
     `.venv\Scripts\activate`             # activation de l'environnement
     `python -m pip install Flask`        # installation de Flask
-    ```
+
 2) création du fichier principal projetcards.py
 
     utilisation de la fonction app.route()
