@@ -5,9 +5,9 @@ Ce projet prendra la forme de deux containers interagissant ensemble pour former
 
 ## Sommaire
 - [Installation](#installation)
-- [Utilisation](#utilisation)
-- [Contribuer](#contribuer)
-- [Licence](#licence)
+- [création du fichier principal projetcards.py](#création-du-fichier-principal-projetcards.py)
+- [fichier index.html](#fichier-index.html)
+- [création de deux pages](#création-de-deux-pages)
 
 ------------------- Création de l'application Flask ------------------------
 
@@ -18,35 +18,28 @@ Ce projet prendra la forme de deux containers interagissant ensemble pour former
 &emsp;&emsp;.venv\Scripts\activate&emsp;# activation de l'environnement  
 &emsp;&emsp;python -m pip install Flask &emsp;# installation de Flask  
 
-2) création du fichier principal projetcards.py
+## création du fichier principal projetcards.py
+&emsp;utilisation de la fonction app.route()
+&emsp;&emsp;http://127.0.0.1:5000/
+&emsp;&emsp;http://127.0.0.1:5000/galerie
+&emsp;&emsp;http://127.0.0.1:5000/new_personnage
 
-    utilisation de la fonction app.route()
+&emsp;utilisation de la fonction render_templates()
 
-    http://127.0.0.1:5000/
-
-    http://127.0.0.1:5000/galerie
-
-    http://127.0.0.1:5000/new_personnage
-
-    utilisation de la fonction render_templates()
-
-3) fichier index.html
-
-    utilisation de la fonction url_for(), avec l'affichage d'images sans utiliser de variable :
-
-        - un lien qui redirige vers la route Flask nommée /galerie ("img/galerie.jpg")
-
-        - un lien qui redirige vers la route Flask nommée /new_personnage (img/ajoutcards.jpg)
+## fichier index.html
+&emsp;utilisation de la fonction url_for(), avec l'affichage d'images sans utiliser de variable :  
+&emsp;&emsp;- un lien qui redirige vers la route Flask nommée /galerie ("img/galerie.jpg")  
+&emsp;&emsp;- un lien qui redirige vers la route Flask nommée /new_personnage (img/ajoutcards.jpg)
     
-4) création de deux pages : galerie.html et new_personnage.html
+## création de deux pages
+&emsp;galerie :  
+&emsp;&emsp;bouton de retour à la page d'accueil  
+&emsp;&emsp;affiche toutes les images se trouvant dans le dossier uploaded_images
 
-    galerie : bouton de retour à la page d'accueil
-                
-              affiche toutes les images se trouvant dans le dossier uploaded_images
+&emsp;new_personnage : 
+&emsp;&emsp;bouton de retour à la page d'accueil  
+&emsp;&emsp;formulaire pour récupérer un fichier auprès de l'utilisateur
 
-    new_personnage : bouton de retour à la page d'accueil
-
-                     formulaire pour récupérer un fichier auprès de l'utilisateur
 
 ------------------- conteneurisation de l'application Flask  ------------------------
 
