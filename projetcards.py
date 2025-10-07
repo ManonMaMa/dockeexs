@@ -64,10 +64,10 @@ def upload_file():
             return render_template('new_personnage.html')
         # si l'extension est correcte
         elif allowed_file(file.filename):
-            filename = secure_filename(file.filename)                           # Nettoie le nom du fichier pour enlever les caractères dangereux ou les espaces.
-            path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            filename = secure_filename(file.filename)                           # nettoie le nom du fichier pour enlever les caractères dangereux ou les espaces.
+            path = os.path.join(app.config['UPLOAD_FOLDER'], filename)          # indique quel chemin prendre 
             
-            file.save(path)      # sauvegarde le fichier à l'endroit indiqué
+            file.save(path)                                                     # sauvegarde le fichier à l'endroit indiqué
             img = Image.open(path)
 
             hash_image_test = imagehash.average_hash(img)
