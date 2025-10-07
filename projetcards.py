@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
 from PIL import Image
@@ -24,8 +24,8 @@ class Pokemon(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     image_pokemon = db.Column(db.String(80), unique=True, nullable=False)
     hash_image = db.Column(db.String(1000), unique=True, nullable=False)
-    nom_pokemon = db.Column(db.String(40), unique=True, nullable=False)
-    description_pokemon = db.Column(db.String(400), unique=True, nullable=False)
+    nom_pokemon = db.Column(db.String(40), nullable=False)
+    description_pokemon = db.Column(db.String(400), nullable=False)
 
 # protection : liste d’extensions de fichiers autorisées
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
@@ -38,9 +38,23 @@ def index():
 # Définition d'une route : http://127.0.0.1:5000/galerie
 @app.route("/galerie")
 def galerie():
-    image_list = os.listdir(IMG_FOLDER)                                     # liste tous les fichiers et sous-dossiers présents dans uploaded_images
-    image_list = ["uploaded_images/" + image for image in image_list]       # dans la liste ajoute devant chaque fichier : "uploaded_images/"
-    return render_template('galerie.html', liste_images=image_list)
+    # image_list = os.listdir(IMG_FOLDER)                                     # liste tous les fichiers et sous-dossiers présents dans uploaded_images
+    # image_list = ["uploaded_images/" + image for image in image_list]       # dans la liste ajoute devant chaque fichier : "uploaded_images/"
+    # return render_template('galerie.html', liste_images=image_list)
+    try:
+        # Récupérer tous les utilisateurs dans la table User
+        pokemons = Pokemon.query.all()
+        app.logger.info(f'pokemons -----> {pokemons[0].image_pokemon}')
+        app.logger.info(f'pokemons -----> {pokemons[0].nom_pokemon}')
+        app.logger.info(f'pokemons -----> {pokemons[0].description_pokemon}')
+
+        # Transformer les objets en dictionnaires
+        # pokemons_list = [{"id": pokemon.id, "image_pokemon": pokemon.image_pokemon, "nom_pokemon": pokemons.nom_pokemon, "description_pokemon": pokemons.description_pokemon} for pokemon in pokemons]
+        
+        # return jsonify(pokemons_list), 200  # Retourne les données avec un code HTTP 200
+        return render_template('galerie.html', liste_pokemons = pokemons)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500  # Gestion des erreurs
 
 # vérifier que le nom du fichier à une extension qui se trouve dans ALLOWED_EXTENSIONS
 def allowed_file(filename):
@@ -89,7 +103,7 @@ def upload_file():
     return render_template('new_personnage.html')
 
 def add_pokemon(image_pokemon, hash_image_test, nom_pokemon, description_pokemon):
-    new_pokemon = Pokemon(image_pokemon=image_pokemon, hash_image=hash_image_test, nom_pokemon=nom_pokemon, description_pokemon=description_pokemon)
+    new_pokemon = Pokemon(image_pokemon= 'uploaded_images/' + image_pokemon, hash_image=hash_image_test, nom_pokemon=nom_pokemon, description_pokemon=description_pokemon)
     db.session.add(new_pokemon)
     db.session.commit()
 
