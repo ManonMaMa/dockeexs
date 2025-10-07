@@ -66,13 +66,13 @@ def upload_file():
         # si l'extension est correcte
         elif allowed_file(file.filename):
             filename = secure_filename(file.filename)                           # nettoie le nom du fichier pour enlever les caractères dangereux ou les espaces.
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)          # indique quel chemin prendre 
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)      # indique quel chemin prendre jusqu'au fichier filename
             
             app.logger.info(f'file.filename -----> {file.filename}')
             app.logger.info(f'filename -----> {filename}')
             app.logger.info(f'filepath -----> {filepath}')
 
-            file.save(filepath)      # sauvegarde le fichier à l'endroit indiqué
+            file.save(filepath)                 # sauvegarde le fichier à l'endroit indiqué
             img = Image.open(filepath)
 
             hash_image_test = str(imagehash.average_hash(img))

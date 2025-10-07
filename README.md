@@ -5,9 +5,9 @@ Ce projet prendra la forme de deux containers interagissant ensemble pour former
 ------------------- Création de l'application Flask ------------------------
 1) installation de l'environnement :
     sur le terminal, se placer dans le dossier du projet
-    >py -3 -m venv .venv                # environnement virtuel
-    >.venv\Scripts\activate             # activation de l'environnement
-    >python -m pip install Flask        # installation de Flask
+       py -3 -m venv .venv                # environnement virtuel
+       .venv\Scripts\activate             # activation de l'environnement
+       python -m pip install Flask        # installation de Flask
 
 2) création du fichier principal projetcards.py
     utilisation de la fonction app.route()
@@ -25,8 +25,10 @@ Ce projet prendra la forme de deux containers interagissant ensemble pour former
 4) création de deux pages : galerie.html et new_personnage.html
     - galerie : bouton de retour à la page d'accueil
                 affiche toutes les images se trouvant dans le dossier uploaded_images
-    - new_personnage :  bouton de retour à la page d'accueil
-                        formulaire pour récupérer un fichier auprès de l'utilisateur
+    - new_personnage : bouton de retour à la page d'accueil
+                       formulaire pour récupérer un fichier auprès de l'utilisateur
+
+------------------- conteneurisation de l'application Flask  ------------------------
 
 
 
