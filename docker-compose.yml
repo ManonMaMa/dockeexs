@@ -1,7 +1,6 @@
-version: '3'
 services:
   web:
-    # même utilité que la commande build
+    # Même utilité que la commande build.
     build: .
     restart: always
     ports:
@@ -10,7 +9,7 @@ services:
       - db
     environment:
       - DATABASE_URL=postgresql://pokemon:password@db/myapp
-    # ce qui permet de recharger la page avec les modifs de la base de données
+    # Ce qui permet de recharger la page avec les modifs de la base de données.
     volumes:
       - .:/app
   db:
@@ -19,16 +18,16 @@ services:
       - POSTGRES_USER=pokemon
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=myapp
-    # sauvegarder les données
+    # Sauvegarder les données.
     volumes: 
       - postgres_data:/var/lib/postgresql/data
-# ________permet d'avoir un œil sur la bd________
+# ________Permet d'avoir un œil sur la bdd.________
   adminer:
     image: adminer
     restart: always
     ports:
       - 8080:8080
 
-# récupère les données de la bd
+# Récupère les données de la bdd.
 volumes:
   postgres_data:
