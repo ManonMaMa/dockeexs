@@ -17,9 +17,11 @@
     
     <!-- boucle qui parcourt liste_pokemons transmis par le render_template() -->
     {% for pokemon in liste_pokemons %}
-        <p> {{ pokemon.nom_pokemon }} </p>
-        <img src="{{url_for('static', filename=pokemon.image_pokemon)}}" alt="Voici le nom de l'image : {{image_pokemon}}"> <!-- affiche l'image -->
-        <p> {{ pokemon.description_pokemon }} </p>
+        <div class="cards">
+            <p> {{ pokemon.nom_pokemon }} </p>
+            <img class='imgcards' src="{{url_for('static', filename=pokemon.image_pokemon)}}" alt="Voici le nom de l'image : {{image_pokemon}}"> <!-- affiche l'image -->
+            <p> {{ pokemon.description_pokemon }} </p>
+        </div>
     {% endfor %}
 </body>
 </html>
