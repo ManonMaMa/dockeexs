@@ -50,7 +50,9 @@ def galerie():
     try:
         # Récupérer tous les utilisateurs dans la table Pokemon et les renvoyer dans une liste
         pokemons = Pokemon.query.all()
-        return render_template('galerie.html', liste_pokemons = pokemons)
+        isNotEmpty = len(pokemons) > 0 
+
+        return render_template('galerie.html', liste_pokemons = pokemons, isNotEmpty=isNotEmpty)
     except Exception as e:
         return jsonify({"error": str(e)}), 500  # Gestion des erreurs
 
