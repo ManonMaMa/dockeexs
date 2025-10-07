@@ -1,9 +1,40 @@
+@font-face {
+    font-family: 'octo';
+    src:
+    url("../police/tenbyfive/tenby-five.otf") format("truetype");
+  }
+
+div{
+    font-family: 'octo';
+    font-size: 4vw;
+}
+
 p{
-    color : red
+    font-family: 'octo';
+    color : rgb(14, 14, 80)
 }
 
 body{
     background-color: rgb(14, 14, 80);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.cards{
+    background-color: lightskyblue;
+    border-radius: 3vw;
+    width: 17vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1vw;
+}
+
+.imgcards{
+    width : 15vw;
+    height : 15vw;
+    border-radius: 3vw;
 }
 
 .image{
@@ -12,8 +43,9 @@ body{
 }
 
 .imageretour{
-    width : 2vw;
-    border-radius : 1vw;
+    width :4.5vw;
+    border-radius : 1.6vw;
+    transform: rotate(270deg);
 }
 
 .lien{
@@ -30,14 +62,72 @@ body{
 
 .retouraccueil{
     position: fixed;
-    left: 2vw;
-    top: 2vw;
+    left: 1vw;
+    top: 1vw;
 }
 
 input{
-    color : white
+    margin-left: 3vw;
+    font-family: 'octo';
+    font-size: 2vw;
+    color : lightskyblue;
+}
+
+input[type=file] {
+  padding: 2vw;
+  border: 1px solid lightskyblue;
+}
+
+input[type=file]::file-selector-button {
+    font-family: 'octo';
+    font-size: 2vw;
+    border: none;
+    background: lightskyblue;
+    padding: 1vw;
+    margin-right: 2vw;
+    color: rgb(14, 14, 80);
+    cursor: pointer;
+    border-radius: 1vw;
 }
 
 .bouton{
-    color : green
+    font-size: 2vw;
+    padding: 1vw;
+    background: lightskyblue;
+    color : rgb(14, 14, 80);
+    border : none
+}
+
+.titre{
+    width: 99vw;
+    color : lightskyblue;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 4vw;
+}
+
+.nom_pokemon{
+    font-size: 1.8vw;
+    margin: 0.5vw;
+}
+
+.description{
+    font-size: 0.8vw;
+    margin-left: 1vw;
+    margin-right: 1vw;
+    text-align: center;
+}
+
+#preview {
+    position : fixed;
+    left : 5vw;
+    top : 20vw;
+    max-width: 30vw;
+    max-height: 30vw;
+    border-radius: 3vw;
+    display: none;
+}
+
+.vide{
+    color : red
 }

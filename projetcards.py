@@ -4,112 +4,191 @@ from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
 from PIL import Image
 import imagehash
+import requests
+import json
+import base64
+import config
+
 
 # Lors du développement d'une app Flask, mettre :
 #       les fichiers HTML dans un dossier templates/
 #       les fichiers CSS, JS, images dans un dossier static/
 
-# création de l'application Flask (on indique que ce fichier est le fichier principal)
-app = Flask(__name__)       # __name__ : variable spéciale de python contenant le nom de ce fichier
+# Création de l'application Flask (on indique que ce fichier est le fichier principal).
+app = Flask(__name__)       # __name__ : variable spéciale de python contenant le nom de ce fichier.
 
-# gestion des fichiers uploadés (images envoyées par un formulaire)
-IMG_FOLDER = '/app/static/uploaded_images'                  # écriture d'un chemin lisible par tous (windows, linux, mac)
-app.config["UPLOAD_FOLDER"] = IMG_FOLDER                    # indique à Flask le chemin pour faire les sauvegardes
+# Gestion des fichiers uploadés (images envoyées par un formulaire).
+app.config["UPLOAD_FOLDER"] = config.IMG_FOLDER                    # Indique à Flask le chemin pour faire les sauvegardes.
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
-db = SQLAlchemy(app)
+database = SQLAlchemy(app)
 
-# Exemple de modèle
-class Pokemon(db.Model):
-    __tablename__ = 'pokemons'
-    id = db.Column(db.Integer, primary_key=True)
-    image_pokemon = db.Column(db.String(80), unique=True, nullable=False)
-    hash_image = db.Column(db.String(1000), unique=True, nullable=False)
-    nom_pokemon = db.Column(db.String(40), nullable=False)
-    description_pokemon = db.Column(db.String(400), nullable=False)
 
-# protection : liste d’extensions de fichiers autorisées
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-
-# Définition de la route principale : http://127.0.0.1:5000/
+# Définition de la route principale : http://127.0.0.1:5050/
 @app.route("/")                             
 def index():
     return render_template('index.html')        # fonction de Flask qui va chercher index.html dans le dossier templates/
 
-# Définition d'une route : http://127.0.0.1:5000/galerie
+
+# Définition d'une route : http://127.0.0.1:5050/galerie
 @app.route("/galerie")
-def galerie():
-    # image_list = os.listdir(IMG_FOLDER)                                     # liste tous les fichiers et sous-dossiers présents dans uploaded_images
-    # image_list = ["uploaded_images/" + image for image in image_list]       # dans la liste ajoute devant chaque fichier : "uploaded_images/"
-    # return render_template('galerie.html', liste_images=image_list)
+def display_galerie():
     try:
-        # Récupérer tous les utilisateurs dans la table User
+        # Récupérer tous les utilisateurs dans la table Pokemon et les renvoyer dans une liste.
         pokemons = Pokemon.query.all()
-        app.logger.info(f'pokemons -----> {pokemons[0].image_pokemon}')
-        app.logger.info(f'pokemons -----> {pokemons[0].nom_pokemon}')
-        app.logger.info(f'pokemons -----> {pokemons[0].description_pokemon}')
+        is_not_empty = len(pokemons) > 0
 
-        # Transformer les objets en dictionnaires
-        # pokemons_list = [{"id": pokemon.id, "image_pokemon": pokemon.image_pokemon, "nom_pokemon": pokemons.nom_pokemon, "description_pokemon": pokemons.description_pokemon} for pokemon in pokemons]
-        
-        # return jsonify(pokemons_list), 200  # Retourne les données avec un code HTTP 200
-        return render_template('galerie.html', liste_pokemons = pokemons)
+        return render_template('galerie.html', liste_pokemons = pokemons, is_not_empty=is_not_empty)
     except Exception as e:
-        return jsonify({"error": str(e)}), 500  # Gestion des erreurs
-
-# vérifier que le nom du fichier à une extension qui se trouve dans ALLOWED_EXTENSIONS
-def allowed_file(filename):
-    # divise le nom du fichier en liste en séparant par le caractère "point"
-    # [1] : prend la deuxième partie
-    # transforme l’extension en minuscules
-    # return true si l'extension se trouve dans ALLOWED_EXTENSIONS, false sinon
-    return filename.split('.')[1].lower() in ALLOWED_EXTENSIONS
+        return jsonify({"error": str(e)}), 500  # Gestion des erreurs.
 
 
-# Définition d'une route : http://127.0.0.1:5000/new_personnage
+# Définition d'une route : http://127.0.0.1:5050/new_personnage
 @app.route('/new_personnage', methods=['GET', 'POST'])
 def upload_file():
-    # vérifier que l'on récupère les données d'un formulaire
+    # Vérifier que l'on récupère les données d'un formulaire.
     if request.method == 'POST':
-        # si request.files est vide car 'file' n'a pas été transmis du tout
+        # Si request.files ne contient pas de fichier (aucun fichier n'a été transmis), ne fait rien et recharge la page.
         if 'file' not in request.files:
-            return render_template('index.html')
-        file = request.files['file']        # variable file qui récupère le fichier 'file' envoyé par l'utilisateur
-        # si le nom du fichier est vide 
-        if file.filename == '':
-            return render_template('index.html')
-        # si l'extension est correcte
-        elif allowed_file(file.filename):
-            filename = secure_filename(file.filename)                           # nettoie le nom du fichier pour enlever les caractères dangereux ou les espaces.
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)      # indique quel chemin prendre jusqu'au fichier filename
-            
-            app.logger.info(f'file.filename -----> {file.filename}')
-            app.logger.info(f'filename -----> {filename}')
-            app.logger.info(f'filepath -----> {filepath}')
+            return render_template('new_personnage.html')
 
-            file.save(filepath)                 # sauvegarde le fichier à l'endroit indiqué
+        file = request.files['file']        # Variable file qui récupère le fichier 'file' envoyé par l'utilisateur.
+        # Si le nom du fichier est vide, ne fait rien et recharge la page.
+        if file.filename == '':
+            return render_template('new_personnage.html')
+
+        # Si l'extension est correcte, traite l'image.
+        elif allowed_file(file.filename):
+            filename = secure_filename(file.filename)                           # Nettoie le nom du fichier pour enlever les caractères dangereux ou les espaces.
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)      # Indique quel chemin prendre jusqu'au fichier filename.
+
+            file.save(filepath)                 # Sauvegarde le fichier à l'endroit indiqué.
             img = Image.open(filepath)
 
             hash_image_test = str(imagehash.average_hash(img))
-            app.logger.info(f'hash -----> {hash_image_test}')
 
-            hash_pokemon = db.session.execute(db.select(Pokemon).filter_by(hash_image=hash_image_test)).scalar_one_or_none()
-
-            app.logger.info(f'hash -----> {hash_pokemon}')
+            hash_pokemon = database.session.execute(database.select(Pokemon).filter_by(hash_image=hash_image_test)).scalar_one_or_none()
 
             if hash_pokemon is None:
-                add_pokemon(filename, hash_image_test, 'pokemon', 'ceci est un pokemon')
+                infos_pokemon = get_image_description(filepath)
+                add_pokemon(filename, hash_image_test, infos_pokemon["nom"], infos_pokemon["description"])
             return render_template('new_personnage.html')
-    # s'il ne s'agit pas d'un fichier, redémarrer la page
+
+    # S'il ne s'agit pas d'un fichier, redémarrer la page.
     return render_template('new_personnage.html')
+
+
+# Exemple de modèle.
+class Pokemon(database.Model):
+    __tablename__ = 'pokemons'
+    id = database.Column(database.Integer, primary_key=True)
+    image_pokemon = database.Column(database.String(80), unique=True, nullable=False)
+    hash_image = database.Column(database.String(1000), unique=True, nullable=False)
+    nom_pokemon = database.Column(database.String(40), nullable=False)
+    description_pokemon = database.Column(database.String(400), nullable=False)
+
+
+# Vérifier que le nom du fichier à une extension qui se trouve dans ALLOWED_EXTENSIONS.
+def allowed_file(filename):
+    # Divise le nom du fichier en liste en séparant par le caractère "point".
+    # [1] : prend la deuxième partie.
+    # Transforme l’extension en minuscules.
+    # Return true si l'extension se trouve dans ALLOWED_EXTENSIONS, false sinon.
+    return filename.split('.')[1].lower() in config.ALLOWED_EXTENSIONS
+
 
 def add_pokemon(image_pokemon, hash_image_test, nom_pokemon, description_pokemon):
     new_pokemon = Pokemon(image_pokemon= 'uploaded_images/' + image_pokemon, hash_image=hash_image_test, nom_pokemon=nom_pokemon, description_pokemon=description_pokemon)
-    db.session.add(new_pokemon)
-    db.session.commit()
+    database.session.add(new_pokemon)
+    database.session.commit()
 
-# Lancement du serveur : mode debug et hot reload actif
+
+def get_image_description(image_path):
+    # Lit et encode l'image.
+    base64_image = encode_image_to_base64(image_path)
+    image_type = "png"
+    if image_path.endswith(".jpg"):
+        image_type = "jpeg"
+    elif image_path.endswith(".png"):
+        image_type = "png"
+
+    data_url = f"data:image/{image_type};base64,{base64_image}"
+
+    response = requests.post(
+      url="https://openrouter.ai/api/v1/chat/completions",
+
+      headers={
+        "Authorization": f"Bearer {config.OPENROUTER_KEY}"
+      },
+
+      data=json.dumps({
+        "model": "meta-llama/llama-4-scout:free",
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "Voici l'image d'un nouveau pokémon. En partant de l'image, crée un nom pour ce pokémon et renvoie-moi UNIQUEMENT ce nom."
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": data_url
+                    }
+                }
+            ]
+          }
+        ]
+      })
+    )
+
+    app.logger.info(f"response nom -------> {response}")
+    response = response.json()
+    app.logger.info(f"response nom -------> {response}")
+    nom = response["choices"][0]["message"]["content"]
+
+    response = requests.post(
+        url="https://openrouter.ai/api/v1/chat/completions",
+
+        headers={
+            "Authorization": f"Bearer {config.OPENROUTER_KEY}"
+        },
+
+        data=json.dumps({
+            "model": "meta-llama/llama-4-scout:free",
+            "messages": [
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": f"Voici l'image d'un nouveau pokémon qui s'appelle {nom}. Crée une description de 200 à 300 caractères pour ce pokémon et renvoie-moi UNIQUEMENT cette description."
+                        },
+                        {
+                            "type": "image_url",
+                            "image_url": {
+                                "url": data_url
+                            }
+                        }
+                    ]
+                }
+            ]
+        })
+    )
+
+    response = response.json()
+    description = response["choices"][0]["message"]["content"]
+    return {"nom": nom, "description": description}
+
+
+def encode_image_to_base64(image_path):
+    with open(image_path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode('utf-8')
+
+
+# Lancement du serveur : mode debug et hot reload actif.
 if __name__ == '__main__':
     with app.app_context():
-        db.create_all()
+        database.create_all()
     app.run(host='0.0.0.0', port=5000, debug=True)
 
