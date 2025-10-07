@@ -5,8 +5,8 @@ Ce projet prendra la forme de deux containers interagissant ensemble pour former
 
 ## Sommaire
 - [Installation](#installation)
-- [création du fichier principal projetcards.py](#création-du-fichier-principal-projetcards.py)
-- [fichier index.html](#fichier-index.html)
+- [création du fichier principal projetcards](#création-du-fichier-principal-projetcards)
+- [fichier index](#fichier-index)
 - [création de deux pages](#création-de-deux-pages)
 
 ------------------- Création de l'application Flask ------------------------
@@ -18,7 +18,7 @@ Ce projet prendra la forme de deux containers interagissant ensemble pour former
 &emsp;&emsp;.venv\Scripts\activate&emsp;# activation de l'environnement  
 &emsp;&emsp;python -m pip install Flask &emsp;# installation de Flask  
 
-## création du fichier principal projetcards.py
+## création du fichier principal projetcards
 &emsp;utilisation de la fonction app.route()
 &emsp;&emsp;http://127.0.0.1:5000/
 &emsp;&emsp;http://127.0.0.1:5000/galerie
@@ -26,7 +26,7 @@ Ce projet prendra la forme de deux containers interagissant ensemble pour former
 
 &emsp;utilisation de la fonction render_templates()
 
-## fichier index.html
+## fichier index
 &emsp;utilisation de la fonction url_for(), avec l'affichage d'images sans utiliser de variable :  
 &emsp;&emsp;- un lien qui redirige vers la route Flask nommée /galerie ("img/galerie.jpg")  
 &emsp;&emsp;- un lien qui redirige vers la route Flask nommée /new_personnage (img/ajoutcards.jpg)
@@ -36,7 +36,7 @@ Ce projet prendra la forme de deux containers interagissant ensemble pour former
 &emsp;&emsp;bouton de retour à la page d'accueil  
 &emsp;&emsp;affiche toutes les images se trouvant dans le dossier uploaded_images
 
-&emsp;new_personnage : 
+&emsp;new_personnage :  
 &emsp;&emsp;bouton de retour à la page d'accueil  
 &emsp;&emsp;formulaire pour récupérer un fichier auprès de l'utilisateur
 
