@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Galerie</title>
-    <!-- appel des fichiers css -->
+    <!-- Appel des fichiers css. -->
     <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
 </head>
 
@@ -17,12 +17,12 @@
 
     <div class="titre">Galerie Pokemon</div>
     
-    <!-- boucle qui parcourt liste_pokemons transmis par le render_template() -->
+    <!-- Boucle qui parcourt liste_pokemons transmis par le render_template(). -->
     {% if is_not_empty %}
         {% for pokemon in liste_pokemons %}
             <div class="cards">
                 <p class='nom_pokemon'> {{ pokemon.nom_pokemon }} </p>
-                <img class='imgcards' src="{{url_for('static', filename=pokemon.image_pokemon)}}" alt="Voici le nom de l'image : {{image_pokemon}}"> <!-- affiche l'image -->
+                <img class='imgcards' src="{{url_for('static', filename=pokemon.image_pokemon)}}" alt="Voici le nom de l'image : {{image_pokemon}}"> <!-- Affiche l'image. -->
                 <p class='description'> {{ pokemon.description_pokemon }} </p>
             </div>
         {% endfor %}
