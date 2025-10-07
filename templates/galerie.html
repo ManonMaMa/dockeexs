@@ -21,13 +21,13 @@
     {% if isNotEmpty %}
         {% for pokemon in liste_pokemons %}
             <div class="cards">
-                <p> {{ pokemon.nom_pokemon }} </p>
+                <p class='nom_pokemon'> {{ pokemon.nom_pokemon }} </p>
                 <img class='imgcards' src="{{url_for('static', filename=pokemon.image_pokemon)}}" alt="Voici le nom de l'image : {{image_pokemon}}"> <!-- affiche l'image -->
-                <p> {{ pokemon.description_pokemon }} </p>
+                <p class='description'> {{ pokemon.description_pokemon }} </p>
             </div>
         {% endfor %}
     {% else %}
-        <p>La galerie est vide</p>
+        <p class='vide'>La galerie est vide</p>
     {% endif %}
 </body>
 </html>
