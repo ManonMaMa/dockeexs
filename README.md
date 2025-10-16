@@ -4,22 +4,19 @@
 Ce projet prendra la forme de deux containers interagissant ensemble pour former une seule et même application. Pour ce faire, nous utiliserons docker compose un outil de composition des conteneurs simple d’utilisation.
 
 ## Sommaire
-------------------- Création de l'application Flask ------------------------
 - [Installation](#installation)
 - [Création du fichier principal projetcards](#creation-du-fichier-principal-projetcards)
-- [Création du fichier index](#creation-du-fichier-index)
+- [Fichier index](#fichier-index)
 - [Création de deux pages](#creation-de-deux-pages)
-
-------------------- Conteneurisation de l'application Flask  ------------------------
 - [Création de fichiers](#creation-de-fichiers)
 - [Construction de l'image initiale](#construction-de-l-image-initiale)
-- [Mapping de volume](#mapping-de-volume)
-- [Installation de l'image sur Docker Hub](#installation-de-l-image-sur-Docker-Hub)
 - [Fichier index](#fichier-index)
 - [Fichier index](#fichier-index)
-
+- [Fichier index](#fichier-index)
+- [Fichier index](#fichier-index)
 
 ------------------- Création de l'application Flask ------------------------
+
 
 ## Installation
 1. sur le terminal, se placer dans le dossier du projet  
@@ -35,7 +32,7 @@ Ce projet prendra la forme de deux containers interagissant ensemble pour former
 
 &emsp;utilisation de la fonction render_templates()
 
-## Création du fichier index
+## Fichier index
 &emsp;Utilisation de la fonction url_for(), avec l'affichage d'images sans utiliser de variable :  
 &emsp;&emsp;- Un lien qui redirige vers la route Flask nommée /galerie ("img/galerie.jpg").  
 &emsp;&emsp;- Un lien qui redirige vers la route Flask nommée /new_personnage (img/ajoutcards.jpg).
@@ -50,7 +47,7 @@ Ce projet prendra la forme de deux containers interagissant ensemble pour former
 &emsp;&emsp;Formulaire pour récupérer un fichier auprès de l'utilisateur.
 
 
-------------------- Conteneurisation de l'application Flask  ------------------------
+------------------- conteneurisation de l'application Flask  ------------------------
 
 ## Création de fichiers   
 &emsp;requirements.txt : fichier des dépendances  
@@ -59,25 +56,8 @@ Ce projet prendra la forme de deux containers interagissant ensemble pour former
 ## Construction de l'image initiale  
 &emsp;Ouvrir Docker Desktop  
 ```Bash 
-docker build -t projetcards .  
+docker build -t projectcards .  
 docker images  
+docker run -v cheminAbsoluJusqua/dockeexs:/python-docker -p 5000:5000 projectcards  
 ```  
 
-## Mapping de volume
-&emsp;Lancement du container en utilisant mapping de volume (-v) :
-```Bash 
-docker run -v cheminAbsoluJusqua/dockeexs:/python-docker -p 5000:5000 projetcards 
-```  
-
-## Installation de l'image sur Docker Hub
-```Bash 
-docker login
-docker tag projetcards monpseudo/projetcards:latest
-docker images
-docker push monpseudo/projetcards:latest
-docker pull monpseudo/projetcards:latest
-```  
-
-------------------- docker compose  ------------------------
-
-## 

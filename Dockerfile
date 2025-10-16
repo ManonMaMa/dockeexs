@@ -13,7 +13,6 @@ WORKDIR /python-docker
 COPY requirements.txt requirements.txt
 # Les bibliothèques Python, qui se trouvent dans requirements.txt, sont installées dans l’image finale.
 RUN pip3 install -r requirements.txt
-RUN pip django-bootstrap5
 
 # Copie de notre répertoire locale vers le répertoire de l'image Docker.
 # COPY . .  # La copie a été déplacée dans le fichier docker-compose.
