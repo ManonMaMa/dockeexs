@@ -72,8 +72,8 @@ class Pokemon(database.Model):
     id = database.Column(database.Integer, primary_key=True)
     image_pokemon = database.Column(database.String(80), unique=True, nullable=False)
     hash_image = database.Column(database.String(1000), unique=True, nullable=False)
-    nom_pokemon = database.Column(database.String(40), nullable=False)
-    description_pokemon = database.Column(database.String(400), nullable=False)
+    nom_pokemon = database.Column(database.String(2000), nullable=False)
+    description_pokemon = database.Column(database.String(2000), nullable=False)
 
 
 # Vérifier que le nom du fichier à une extension qui se trouve dans ALLOWED_EXTENSIONS.
