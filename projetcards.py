@@ -10,7 +10,7 @@ import base64
 import config
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv()   # charge automatiquement les variables d’environnement contenues dans le fichier .env
 
 # Lors du développement d'une app Flask, mettre :
 #       les fichiers HTML dans un dossier templates/
@@ -23,7 +23,7 @@ app = Flask(__name__)       # __name__ : variable spéciale de python contenant 
 app.config["UPLOAD_FOLDER"] = config.IMG_FOLDER                    # Indique à Flask le chemin pour faire les sauvegardes.
 # lis dans les variables d’environnement de docker-compose.yml la valeur DATABASE_URL et l'utilise comme adresse de connexion pour SQLAlchemy dans l'application Flask
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
-database = SQLAlchemy(app)
+database = SQLAlchemy(app)      # associe SQLAlchemy à l'appli Flask
 
 
 @app.route("/")     # Définition de la route principale : http://127.0.0.1:5050/
