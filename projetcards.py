@@ -61,7 +61,7 @@ def upload_file():
         # Si l'extension est correcte, traite l'image ; sinon, ne fait rien et recharge la page.
         elif is_file_allowed(file.filename):
             turn_file_to_pokemon(file)
-            return render_template('new_personnage.html')
+            return render_template('index.html')
 
     return render_template('new_personnage.html')
 
