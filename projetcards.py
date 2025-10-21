@@ -21,6 +21,7 @@ app = Flask(__name__)       # __name__ : variable spéciale de python contenant 
 
 # Gestion des fichiers uploadés (images envoyées par un formulaire).
 app.config["UPLOAD_FOLDER"] = config.IMG_FOLDER                    # Indique à Flask le chemin pour faire les sauvegardes.
+# lis dans les variables d’environnement de docker-compose.yml la valeur DATABASE_URL et l'utilise comme adresse de connexion pour SQLAlchemy dans l'application Flask
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 database = SQLAlchemy(app)
 

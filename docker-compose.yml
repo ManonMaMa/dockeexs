@@ -6,18 +6,19 @@ services:
     ports:
       - "5050:5000"
     depends_on:
-      - db
+      - db                                                    # le service webapp doit dépendre du service db
     environment:
-      - DATABASE_URL=postgresql://pokemon:password@db/myapp
+      - DATABASE_URL=postgresql://pokemon:password@db/myapp   # reprend les données indiquées dans db: environment
     # Ce qui permet de recharger la page avec les modifs de la base de données.
     volumes:
       - .:/app
   db:
     image: postgres
     environment:
-      - POSTGRES_USER=pokemon
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=myapp
+      # variables requises par l’image officielle PostgreSQL pour permettre à l’application Flask de s’authentifier
+      - POSTGRES_USER=pokemon         # utilisateur
+      - POSTGRES_PASSWORD=password    # mot de passe
+      - POSTGRES_DB=myapp             # nom de la base de données
     # Sauvegarder les données.
     volumes: 
       - postgres_data:/var/lib/postgresql/data
