@@ -4,3 +4,4 @@ Flask-SQLAlchemy
 pillow
 imagehash
 requests
+python-dotenv

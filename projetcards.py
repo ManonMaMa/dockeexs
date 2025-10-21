@@ -8,7 +8,9 @@ import requests
 import json
 import base64
 import config
+from dotenv import load_dotenv
 
+load_dotenv()
 
 # Lors du développement d'une app Flask, mettre :
 #       les fichiers HTML dans un dossier templates/
@@ -120,7 +122,7 @@ def get_image_description(image_path):
       url="https://openrouter.ai/api/v1/chat/completions",
 
       headers={
-        "Authorization": f"Bearer {config.OPENROUTER_KEY_2}"
+        "Authorization": f"Bearer {os.environ.get("CLE_API")}"
       },
 
       data=json.dumps({
@@ -154,7 +156,7 @@ def get_image_description(image_path):
         url="https://openrouter.ai/api/v1/chat/completions",
 
         headers={
-            "Authorization": f"Bearer {config.OPENROUTER_KEY_2}"
+            "Authorization": f"Bearer {os.environ.get("CLE_API")}"
         },
 
         data=json.dumps({
