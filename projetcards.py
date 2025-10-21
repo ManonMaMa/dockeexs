@@ -25,17 +25,17 @@ app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 database = SQLAlchemy(app)
 
 
-# Définition de la route principale : http://127.0.0.1:5050/
-@app.route("/")                             
+@app.route("/")     # Définition de la route principale : http://127.0.0.1:5050/
 def index():
-    return render_template('index.html')        # fonction de Flask qui va chercher index.html dans le dossier templates/
+    """Retourne le fichier index.html du dossier templates/ grâce à la fonction render_template() de Flask."""
+    return render_template('index.html')
 
 
-# Définition d'une route : http://127.0.0.1:5050/galerie
-@app.route("/galerie")
+@app.route("/galerie")      # Définition d'une route : http://127.0.0.1:5050/galerie
 def display_galerie():
+    """Retourne une page qui affiche tous les pokémons présents dans la BDD."""
     try:
-        # Récupérer tous les utilisateurs dans la table Pokemon et les renvoyer dans une liste.
+        # Récupère toutes les lignes de la table "pokemons" et les transforme en une liste d'objets Pokemon.
         pokemons = Pokemon.query.all()
         is_not_empty = len(pokemons) > 0
 
@@ -44,29 +44,29 @@ def display_galerie():
         return jsonify({"error": str(e)}), 500  # Gestion des erreurs.
 
 
-# Définition d'une route : http://127.0.0.1:5050/new_personnage
-@app.route('/new_personnage', methods=['GET', 'POST'])
+@app.route('/new_personnage', methods=['GET', 'POST'])  # Définition d'une route : http://127.0.0.1:5050/new_personnage
 def upload_file():
-    # Vérifier que l'on récupère les données d'un formulaire.
+    """Affiche une page qui permet à l'utilisateur de créer de nouveaux pokémons (et gère l'enregistrement)."""
+    # Regarde si on récupère les données d'un formulaire. Si oui, enregistre le pokémon.
     if request.method == 'POST':
         # Si request.files ne contient pas de fichier (aucun fichier n'a été transmis), ne fait rien et recharge la page.
         if 'file' not in request.files:
             return render_template('new_personnage.html')
 
-        file = request.files['file']        # Variable file qui récupère le fichier 'file' envoyé par l'utilisateur.
+        file = request.files['file']    # Variable file qui récupère le fichier 'file' envoyé par l'utilisateur.
         # Si le nom du fichier est vide, ne fait rien et recharge la page.
         if file.filename == '':
             return render_template('new_personnage.html')
 
-        # Si l'extension est correcte, traite l'image; sinon, ne fait rien et recharge la page.
+        # Si l'extension est correcte, traite l'image ; sinon, ne fait rien et recharge la page.
         elif is_file_allowed(file.filename):
-            save_file(file)
+            turn_file_to_pokemon(file)
             return render_template('new_personnage.html')
 
     return render_template('new_personnage.html')
 
 
-# Exemple de modèle.
+# Définition de la classe Pokemon, qui est utilisée pour créer la table "pokemons" dans la BDD.
 class Pokemon(database.Model):
     __tablename__ = 'pokemons'
     id = database.Column(database.Integer, primary_key=True)
@@ -76,32 +76,53 @@ class Pokemon(database.Model):
     description_pokemon = database.Column(database.String(2000), nullable=False)
 
 
-# Vérifier que le nom du fichier à une extension qui se trouve dans ALLOWED_EXTENSIONS.
+# Vérifie que le nom du fichier donné à une extension qui se trouve dans ALLOWED_EXTENSIONS.
 def is_file_allowed(filename):
-    # Divise le nom du fichier en liste en séparant par le caractère "point".
-    # [1] : prend la deuxième partie.
-    # Transforme l’extension en minuscules.
-    # Return true si l'extension se trouve dans ALLOWED_EXTENSIONS, false sinon.
-    return filename.split('.')[1].lower() in config.ALLOWED_EXTENSIONS
+    # split('.') : divise le nom du fichier en liste en séparant par le caractère "point".
+    # [-1] : prend la dernière entrée de la liste.
+    # lower() : transforme cette entrée (l’extension) en minuscules.
+    # in : devient True si l'extension se trouve dans ALLOWED_EXTENSIONS, False sinon.
+    return filename.split('.')[-1].lower() in config.ALLOWED_EXTENSIONS
+
+
+def turn_file_to_pokemon(file):
+    """
+    Prend un fichier d'image en paramètre.
+
+    Enregistre le fichier, crée une description par IA, et enregistre la description et l'image associées dans la BDD.
+    """
+    filedata = save_file(file)
+    save_pokemon(filedata)
 
 
 def save_file(file):
-    """Enregistre le fichier donné dans le dossier d'images, puis crée un nom et une description pour l'image si elle n'est pas déjà dans la base de données."""
+    """Enregistre le fichier donné dans le dossier d'images."""
     filename = secure_filename(file.filename)                           # Nettoie le nom du fichier pour enlever les caractères dangereux ou les espaces.
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)      # Indique quel chemin prendre jusqu'au fichier filename.
 
     file.save(filepath)                 # Sauvegarde le fichier à l'endroit indiqué.
+    return filepath, filename
+
+
+def save_pokemon(filedata):
+    """
+    Prends un tuple en paramètre. Le tuple doit contenir un chemin de fichier d'image, et le nom du fichier.
+
+    Si l'image n'est pas déjà dans la base de données, crée un nom de pokémon et une description, puis enregistre le tout dans la BDD.
+    """
+    filepath, filename = filedata
 
     img = Image.open(filepath)
     hash_image = str(imagehash.average_hash(img))
-    hash_pokemon = database.session.execute(database.select(Pokemon).filter_by(hash_image=hash_image)).scalar_one_or_none()
+    database_image = database.session.execute(database.select(Pokemon).filter_by(hash_image=hash_image)).scalar_one_or_none()
 
-    if hash_pokemon is None:
+    # Si l'image n'est pas déjà dans la BDD, une nouvelle ligne peut être ajoutée.
+    if database_image is None:
         infos_pokemon = get_image_description(filepath)
-        add_pokemon(filename, hash_image, infos_pokemon["nom"], infos_pokemon["description"])
+        add_pokemon_to_database(filename, hash_image, infos_pokemon["nom"], infos_pokemon["description"])
 
 
-def add_pokemon(image_pokemon, hash_image_test, nom_pokemon, description_pokemon):
+def add_pokemon_to_database(image_pokemon, hash_image_test, nom_pokemon, description_pokemon):
     new_pokemon = Pokemon(image_pokemon= 'uploaded_images/' + image_pokemon, hash_image=hash_image_test, nom_pokemon=nom_pokemon, description_pokemon=description_pokemon)
     database.session.add(new_pokemon)
     database.session.commit()
@@ -122,7 +143,7 @@ def get_image_description(image_path):
       url="https://openrouter.ai/api/v1/chat/completions",
 
       headers={
-        "Authorization": f"Bearer {os.environ.get("CLE_API")}"
+        "Authorization": f"Bearer {os.environ.get("CLE_API")}"  # os.environ.get() est interchangeable avec os.getenv()
       },
 
       data=json.dumps({
