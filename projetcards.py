@@ -77,8 +77,10 @@ class Pokemon(database.Model):
     description_pokemon = database.Column(database.String(2000), nullable=False)
 
 
-# Vérifie que le nom du fichier donné à une extension qui se trouve dans ALLOWED_EXTENSIONS.
 def is_file_allowed(filename):
+    """
+    Vérifie que le nom du fichier donné à une extension qui se trouve dans ALLOWED_EXTENSIONS.
+    """
     # split('.') : divise le nom du fichier en liste en séparant par le caractère "point".
     # [-1] : prend la dernière entrée de la liste.
     # lower() : transforme cette entrée (l’extension) en minuscules.
@@ -124,6 +126,7 @@ def save_pokemon(filedata):
 
 
 def add_pokemon_to_database(image_pokemon, hash_image_test, nom_pokemon, description_pokemon):
+    """Ajout d'un pokémon à la base de données"""
     new_pokemon = Pokemon(image_pokemon= 'uploaded_images/' + image_pokemon, hash_image=hash_image_test, nom_pokemon=nom_pokemon, description_pokemon=description_pokemon)
     database.session.add(new_pokemon)
     database.session.commit()

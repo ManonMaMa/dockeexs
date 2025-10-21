@@ -4,19 +4,21 @@
 Ce projet prendra la forme de deux containers interagissant ensemble pour former une seule et même application. Pour ce faire, nous utiliserons docker compose un outil de composition des conteneurs simple d’utilisation.
 
 ## Sommaire
-------------------- Création de l'application Flask ------------------------
+---------- Création de l'application Flask --------------
 - [Installation](#installation)
 - [Création du fichier principal projetcards](#creation-du-fichier-principal-projetcards)
 - [Création du fichier index](#creation-du-fichier-index)
 - [Création de deux pages](#creation-de-deux-pages)
 
-------------------- Conteneurisation de l'application Flask  ------------------------
+---------- Conteneurisation de l'application Flask  -----
 - [Création de fichiers](#creation-de-fichiers)
 - [Construction de l'image initiale](#construction-de-l-image-initiale)
 - [Mapping de volume](#mapping-de-volume)
 - [Installation de l'image sur Docker Hub](#installation-de-l-image-sur-Docker-Hub)
-- [Fichier index](#fichier-index)
-- [Fichier index](#fichier-index)
+
+---------- docker compose  ------------------------------
+- [Création d'un second container](#création-d-un-secondcontainer)
+- [Ollama](#ollama)
 
 
 ------------------- Création de l'application Flask ------------------------
@@ -80,4 +82,19 @@ docker pull monpseudo/projetcards:latest
 
 ------------------- docker compose  ------------------------
 
-## 
+## Création d'un second container  
+&emsp;Création d'un fichier docker-compose.yml   
+&emsp;Création d'une connexion avec le conteneur PostgreSQL  
+&emsp;Création de la base de données "pokemons"  
+&emsp;Conservation des données de la base (création d'un Volume)  
+&emsp;Stockage du hash des images  
+
+## Ollama
+&emsp;
+
+------------------- accès sur le web  ------------------------
+### acccès base de données sur le web :
+localhost:8080, remplir les champs avec : postgresql, db, pokemon, password, myapp  
+
+### accès application sur le web :
+localhost:5050  
