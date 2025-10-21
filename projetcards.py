@@ -10,7 +10,7 @@ import base64
 import config
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv()   # Ajoute les variables du fichier .env aux à l'environnement (les variables d'environnement sont accessibles par os.getenv('VARIABLE')).
 
 # Lors du développement d'une app Flask, mettre :
 #       les fichiers HTML dans un dossier templates/
