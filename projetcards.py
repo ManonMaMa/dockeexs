@@ -129,6 +129,7 @@ def add_pokemon_to_database(image_pokemon, hash_image_test, nom_pokemon, descrip
 
 
 def get_image_description(image_path):
+    """Demande à une IA de créer un nom de pokémon et une description pour ce pokémon à partir de l'image donnée en paramètre."""
     # Lit et encode l'image.
     base64_image = encode_image_to_base64(image_path)
     image_type = "png"
@@ -139,45 +140,28 @@ def get_image_description(image_path):
 
     data_url = f"data:image/{image_type};base64,{base64_image}"
 
-    response = requests.post(
-      url="https://openrouter.ai/api/v1/chat/completions",
+    # Demande à l'IA de créer un nom pour le pokémon à partir de son image.
+    name_prompt = "Voici l'image d'un nouveau pokémon. En partant de l'image, crée un nom pour ce pokémon et renvoie-moi UNIQUEMENT ce nom."
+    name = get_ai_response(data_url, name_prompt)
 
-      headers={
-        "Authorization": f"Bearer {os.environ.get("CLE_API")}"  # os.environ.get() est interchangeable avec os.getenv()
-      },
+    # Demande à l'IA de créer une description pour le pokémon à partir de son image et son nom.
+    description_prompt = f"Voici l'image d'un nouveau pokémon qui s'appelle {name}. Crée une description de 200 à 300 caractères pour ce pokémon et renvoie-moi UNIQUEMENT cette description."
+    description = get_ai_response(data_url, description_prompt)
 
-      data=json.dumps({
-        "model": "meta-llama/llama-4-scout:free",
-        "messages": [
-          {
-            "role": "user",
-            "content": [
-                {
-                    "type": "text",
-                    "text": "Voici l'image d'un nouveau pokémon. En partant de l'image, crée un nom pour ce pokémon et renvoie-moi UNIQUEMENT ce nom."
-                },
-                {
-                    "type": "image_url",
-                    "image_url": {
-                        "url": data_url
-                    }
-                }
-            ]
-          }
-        ]
-      })
-    )
+    return {"nom": name, "description": description}
 
-    app.logger.info(f"response nom -------> {response}")
-    response = response.json()
-    app.logger.info(f"response nom -------> {response}")
-    nom = response["choices"][0]["message"]["content"]
 
+def get_ai_response(image_url, prompt):
+    """
+    Prend l'URL d'une image et un prompt en paramètre.
+
+    Envoie l'image et le prompt à une IA et retourne la réponse de l'IA.
+    """
     response = requests.post(
         url="https://openrouter.ai/api/v1/chat/completions",
 
         headers={
-            "Authorization": f"Bearer {os.environ.get("CLE_API")}"
+            "Authorization": f"Bearer {os.environ.get("CLE_API")}"  # os.environ.get() est interchangeable avec os.getenv()
         },
 
         data=json.dumps({
@@ -188,12 +172,12 @@ def get_image_description(image_path):
                     "content": [
                         {
                             "type": "text",
-                            "text": f"Voici l'image d'un nouveau pokémon qui s'appelle {nom}. Crée une description de 200 à 300 caractères pour ce pokémon et renvoie-moi UNIQUEMENT cette description."
+                            "text": prompt
                         },
                         {
                             "type": "image_url",
                             "image_url": {
-                                "url": data_url
+                                "url": image_url
                             }
                         }
                     ]
@@ -203,8 +187,7 @@ def get_image_description(image_path):
     )
 
     response = response.json()
-    description = response["choices"][0]["message"]["content"]
-    return {"nom": nom, "description": description}
+    return response["choices"][0]["message"]["content"]
 
 
 def encode_image_to_base64(image_path):
